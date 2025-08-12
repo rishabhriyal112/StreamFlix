@@ -9,8 +9,9 @@ import { secureFetch, getMovieDetailsEndpoint, getImageUrl, sanitizeForLog } fro
 const Movies = () => {
   const [heroMovies, setHeroMovies] = useState([]);
   const [currentSlide, setCurrentSlide] = useState(0);
-  const [selectedMovie, setSelectedMovie] = useState(null);
+
   const [loading, setLoading] = useState(true);
+  const [selectedMovie, setSelectedMovie] = useState(null);
 
   const fetchHeroMovies = async () => {
     try {
@@ -152,7 +153,10 @@ const Movies = () => {
                   <span>Watch Now</span>
                 </button>
                 
-                <button className="bg-white/20 text-white border border-white/30 px-6 py-3 rounded-lg text-sm font-medium cursor-pointer hover:bg-white/30 transition-colors backdrop-blur-sm min-w-[100px] h-[40px] flex items-center justify-center gap-2">
+                <button 
+                  className="bg-white/20 text-white border border-white/30 px-6 py-3 rounded-lg text-sm font-medium cursor-pointer hover:bg-white/30 transition-colors backdrop-blur-sm min-w-[100px] h-[40px] flex items-center justify-center gap-2"
+                  onClick={() => window.location.href = `/movie/${currentMovie?.id}`}
+                >
                   <Info size={16} />
                   <span>More Info</span>
                 </button>
@@ -200,38 +204,23 @@ const Movies = () => {
         </div>
       </div>
       
-      {/* Movie Player Modal */}
-      <AnimatePresence>
-        {selectedMovie && (
-          <motion.div 
-            className="fixed top-0 left-0 w-full h-full bg-black/90 flex justify-center items-center z-50" 
-            onClick={() => setSelectedMovie(null)}
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-          >
-            <motion.div 
-              className="w-[90%] max-w-4xl h-[60vh] md:h-[450px] rounded-xl overflow-hidden" 
-              onClick={e => e.stopPropagation()}
-              initial={{ scale: 0.8, opacity: 0 }}
-              animate={{ scale: 1, opacity: 1 }}
-              exit={{ scale: 0.8, opacity: 0 }}
-            >
-              <iframe
-                src={selectedMovie.imdb.startsWith('tt') 
-                  ? `https://vidsrc.cc/v2/embed/movie/${selectedMovie.imdb}?autoPlay=false`
-                  : `https://vidsrc.cc/v2/embed/movie/${selectedMovie.imdb.replace('tmdb_', '')}?autoPlay=false`
-                }
-                title={selectedMovie.title}
-                frameBorder="0"
-                allowFullScreen
-                className="w-full h-full"
-              />
-            </motion.div>
-          </motion.div>
-        )}
-      </AnimatePresence>
+
       
+      {/* Movie Player Modal */}
+      {selectedMovie && (
+        <div className="fixed inset-0 bg-black/90 flex items-center justify-center z-50" onClick={() => setSelectedMovie(null)}>
+          <div className="w-[90%] max-w-4xl h-[60vh] md:h-[450px] rounded-xl overflow-hidden" onClick={e => e.stopPropagation()}>
+            <iframe
+              src={`https://vidsrc.cc/v2/embed/movie/${selectedMovie.imdb.startsWith('tt') ? selectedMovie.imdb : selectedMovie.id}`}
+              title={selectedMovie.title}
+              frameBorder="0"
+              allowFullScreen
+              className="w-full h-full"
+            />
+          </div>
+        </div>
+      )}
+
       <Footer />
     </div>
   );

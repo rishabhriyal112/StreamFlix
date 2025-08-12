@@ -57,12 +57,12 @@ const Trending = () => {
       
       <div className="pt-20 pb-8">
         <div className="container mx-auto px-4 md:px-6 lg:px-8">
-          <div className="text-center mb-12">
-            <h1 className="text-4xl md:text-6xl font-bold text-white mb-4 flex items-center justify-center gap-3">
-              <TrendingUp className="text-red-600" size={48} />
-              Trending This Week
+          <div className="text-center mb-8 md:mb-12">
+            <h1 className="text-3xl md:text-4xl lg:text-6xl font-bold text-white mb-4 flex flex-col md:flex-row items-center justify-center gap-3">
+              <TrendingUp className="text-red-600" size={36} md:size={48} />
+              <span>Trending This Week</span>
             </h1>
-            <p className="text-white/70 text-lg">Most popular movies and TV shows</p>
+            <p className="text-white/70 text-base md:text-lg">Most popular movies and TV shows</p>
           </div>
 
           {loading ? (
@@ -74,12 +74,12 @@ const Trending = () => {
               />
             </div>
           ) : (
-            <div className="space-y-16">
+            <div className="space-y-12 md:space-y-16">
               <section>
-                <h2 className="text-3xl font-bold text-white mb-8 flex items-center gap-3">
+                <h2 className="text-2xl md:text-3xl font-bold text-white mb-6 md:mb-8 flex items-center justify-center md:justify-start gap-3">
                   🎬 Trending Movies
                 </h2>
-                <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4">
+                <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-3 md:gap-4">
                   {trendingMovies.map((movie, index) => (
                     <motion.div
                       key={movie.id}
@@ -116,10 +116,10 @@ const Trending = () => {
               </section>
 
               <section>
-                <h2 className="text-3xl font-bold text-white mb-8 flex items-center gap-3">
+                <h2 className="text-2xl md:text-3xl font-bold text-white mb-6 md:mb-8 flex items-center justify-center md:justify-start gap-3">
                   📺 Trending TV Shows
                 </h2>
-                <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4">
+                <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-3 md:gap-4">
                   {trendingTV.map((show, index) => (
                     <motion.div
                       key={show.id}

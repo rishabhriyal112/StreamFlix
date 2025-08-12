@@ -9,8 +9,9 @@ import { secureFetch, getTVDetailsEndpoint, getImageUrl, sanitizeForLog } from "
 const TVShows = () => {
   const [heroShows, setHeroShows] = useState([]);
   const [currentSlide, setCurrentSlide] = useState(0);
-  const [selectedShow, setSelectedShow] = useState(null);
+
   const [loading, setLoading] = useState(true);
+  const [selectedShow, setSelectedShow] = useState(null);
 
   const fetchHeroShows = async () => {
     try {
@@ -158,7 +159,10 @@ const TVShows = () => {
                   <span>Watch Now</span>
                 </button>
                 
-                <button className="bg-white/20 text-white border border-white/30 px-6 py-3 rounded-lg text-sm font-medium cursor-pointer hover:bg-white/30 transition-colors backdrop-blur-sm min-w-[100px] h-[40px] flex items-center justify-center gap-2">
+                <button 
+                  className="bg-white/20 text-white border border-white/30 px-6 py-3 rounded-lg text-sm font-medium cursor-pointer hover:bg-white/30 transition-colors backdrop-blur-sm min-w-[100px] h-[40px] flex items-center justify-center gap-2"
+                  onClick={() => window.location.href = `/tv/${currentShow?.id}`}
+                >
                   <Info size={16} />
                   <span>More Info</span>
                 </button>
@@ -206,41 +210,23 @@ const TVShows = () => {
         </div>
       </div>
       
-      {/* TV Show Player Modal */}
-      <AnimatePresence>
-        {selectedShow && (
-          <motion.div 
-            className="fixed top-0 left-0 w-full h-full bg-black/90 flex justify-center items-center z-50" 
-            onClick={() => setSelectedShow(null)}
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-          >
-            <motion.div 
-              className="w-[90%] max-w-4xl h-[60vh] md:h-[450px] rounded-xl overflow-hidden" 
-              onClick={e => e.stopPropagation()}
-              initial={{ scale: 0.8, opacity: 0 }}
-              animate={{ scale: 1, opacity: 1 }}
-              exit={{ scale: 0.8, opacity: 0 }}
-              transition={{ type: "spring", damping: 25, stiffness: 300 }}
-            >
-              <iframe
-                src={(() => {
-                  const sanitizedId = sanitizeForLog(selectedShow.imdb.startsWith('tt') 
-                    ? selectedShow.imdb 
-                    : selectedShow.imdb.replace('tmdb_', ''));
-                  return `https://vidsrc.cc/v2/embed/tv/${sanitizedId}/1/1?autoPlay=false`;
-                })()}
-                title={`${selectedShow.title} - S1E1`}
-                frameBorder="0"
-                allowFullScreen
-                className="w-full h-full"
-              />
-            </motion.div>
-          </motion.div>
-        )}
-      </AnimatePresence>
+
       
+      {/* TV Show Player Modal */}
+      {selectedShow && (
+        <div className="fixed inset-0 bg-black/90 flex items-center justify-center z-50" onClick={() => setSelectedShow(null)}>
+          <div className="w-[90%] max-w-4xl h-[60vh] md:h-[450px] rounded-xl overflow-hidden" onClick={e => e.stopPropagation()}>
+            <iframe
+              src={`https://vidsrc.cc/v2/embed/tv/${selectedShow.imdb.startsWith('tt') ? selectedShow.imdb : selectedShow.id}/1/1`}
+              title={`${selectedShow.title} - S1E1`}
+              frameBorder="0"
+              allowFullScreen
+              className="w-full h-full"
+            />
+          </div>
+        </div>
+      )}
+
       <Footer />
     </div>
   );

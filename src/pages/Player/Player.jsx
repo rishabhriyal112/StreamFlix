@@ -100,24 +100,24 @@ const Player = () => {
   return (
     <div className="bg-black min-h-screen text-white">
       <motion.div 
-        className="px-5 py-5 md:px-6 flex items-center gap-6 border-b border-white/10 bg-black/90 backdrop-blur-sm sticky top-0 z-50"
+        className="px-4 md:px-5 py-4 md:py-5 flex flex-col md:flex-row items-start md:items-center gap-4 md:gap-6 border-b border-white/10 bg-black/90 backdrop-blur-sm sticky top-0 z-50"
         initial={{ y: -50, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
         transition={{ duration: 0.5 }}
       >
         <motion.button 
-          className="flex items-center gap-2 bg-white/10 border border-white/20 text-white px-4 py-2.5 rounded-lg cursor-pointer transition-all text-sm font-medium hover:bg-white/20 hover:border-white/30"
+          className="flex items-center gap-2 bg-white/10 border border-white/20 text-white px-3 md:px-4 py-2 md:py-2.5 rounded-lg cursor-pointer transition-all text-sm font-medium hover:bg-white/20 hover:border-white/30"
           onClick={() => navigate(-1)}
           whileHover={{ scale: 1.05 }}
           whileTap={{ scale: 0.95 }}
         >
-          <ArrowLeft size={20} />
+          <ArrowLeft size={18} md:size={20} />
           <span>Back</span>
         </motion.button>
         
-        <div>
-          <h1 className="text-2xl font-bold mb-2 bg-gradient-to-r from-white to-red-400 bg-clip-text text-transparent">{movie.title}</h1>
-          <div className="flex items-center gap-3 text-white/70 text-sm">
+        <div className="flex-1">
+          <h1 className="text-xl md:text-2xl font-bold mb-2 bg-gradient-to-r from-white to-red-400 bg-clip-text text-transparent">{movie.title}</h1>
+          <div className="flex flex-wrap items-center gap-2 md:gap-3 text-white/70 text-xs md:text-sm">
             <span>{movie.year}</span>
             <span>•</span>
             <span>{movie.runtime} min</span>
@@ -128,24 +128,22 @@ const Player = () => {
       </motion.div>
 
       <motion.div 
-        className="p-6 max-w-7xl mx-auto"
+        className="p-4 md:p-6 max-w-7xl mx-auto"
         initial={{ scale: 0.95, opacity: 0 }}
         animate={{ scale: 1, opacity: 1 }}
         transition={{ duration: 0.6, delay: 0.2 }}
       >
-        <div className="relative w-full aspect-video rounded-xl overflow-hidden shadow-2xl group">
+        <div className="relative w-full aspect-video rounded-lg md:rounded-xl overflow-hidden shadow-2xl group">
           <iframe
             className="w-full h-full border-0"
             src={(() => {
-              const tmdbId = sanitizeForLog(movie.imdb.replace('tmdb_', ''));
-              const imdbId = movie.imdb.startsWith('tt') ? sanitizeForLog(movie.imdb) : tmdbId;
+              const movieId = movie.imdb.startsWith('tt') ? movie.imdb : movie.id;
               
               switch (movie.type) {
                 case 'tv':
-                  // For TV shows, default to season 1 episode 1
-                  return `https://vidsrc.cc/v2/embed/tv/${imdbId}/1/1?autoPlay=false`;
+                  return `https://embed.su/embed/tv/${movieId}/1/1`;
                 default:
-                  return `https://vidsrc.cc/v2/embed/movie/${imdbId}?autoPlay=false`;
+                  return `https://embed.su/embed/movie/${movieId}`;
               }
             })()}
             title={movie.title}
@@ -168,22 +166,22 @@ const Player = () => {
       </motion.div>
 
       <motion.div 
-        className="px-6 py-10 max-w-7xl mx-auto"
+        className="px-4 md:px-6 py-8 md:py-10 max-w-7xl mx-auto"
         initial={{ y: 50, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
         transition={{ duration: 0.6, delay: 0.4 }}
       >
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-10">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 md:gap-10">
           <div className="lg:col-span-2">
-            <h3 className="text-xl font-semibold mb-4 text-white">Overview</h3>
-            <p className="text-base leading-relaxed text-white/80">{movie.overview}</p>
+            <h3 className="text-lg md:text-xl font-semibold mb-3 md:mb-4 text-white">Overview</h3>
+            <p className="text-sm md:text-base leading-relaxed text-white/80">{movie.overview}</p>
           </div>
           
           <div>
-            <h3 className="text-xl font-semibold mb-4 text-white">Genres</h3>
+            <h3 className="text-lg md:text-xl font-semibold mb-3 md:mb-4 text-white">Genres</h3>
             <div className="flex flex-wrap gap-2">
               {movie.genres?.map((genre) => (
-                <span key={genre.id} className="bg-red-600/20 text-red-400 px-3 py-1.5 rounded-full text-xs font-medium border border-red-600/30">
+                <span key={genre.id} className="bg-red-600/20 text-red-400 px-2 md:px-3 py-1 md:py-1.5 rounded-full text-xs font-medium border border-red-600/30">
                   {genre.name}
                 </span>
               ))}

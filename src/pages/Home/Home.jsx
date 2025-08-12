@@ -9,8 +9,9 @@ import { secureFetch, getMovieEndpoint, getMovieDetailsEndpoint, getImageUrl, sa
 const Home = () => {
   const [heroMovies, setHeroMovies] = useState([]);
   const [currentSlide, setCurrentSlide] = useState(0);
-  const [selectedMovie, setSelectedMovie] = useState(null);
+
   const [loading, setLoading] = useState(true);
+  const [selectedMovie, setSelectedMovie] = useState(null);
 
   const fetchHeroMovies = async () => {
     try {
@@ -19,40 +20,40 @@ const Home = () => {
         throw new Error('Invalid API token format');
       }
       
-      const data = await secureFetch(`https://api.themoviedb.org/3/movie/popular?api_key=${apiToken}&page=1`);
+      const data = await secureFetch(`https://api.themoviedb.org/3/tv/popular?api_key=${apiToken}&page=1`);
       
       if (!data?.results) {
         throw new Error('Invalid API response structure');
       }
       
       const moviesWithDetails = await Promise.all(
-        data.results.slice(0, 5).map(async (movie) => {
+        data.results.slice(0, 5).map(async (show) => {
           try {
-            const detailData = await secureFetch(getMovieDetailsEndpoint(movie.id));
+            const detailData = await secureFetch(`https://api.themoviedb.org/3/tv/${show.id}?api_key=${apiToken}&append_to_response=external_ids`);
             
             return {
-              id: movie.id,
-              title: movie.title || 'Unknown Title',
-              overview: movie.overview || 'No description available',
-              backdrop: getImageUrl(movie.backdrop_path || movie.poster_path, 'backdrop'),
-              poster: getImageUrl(movie.poster_path, 'poster'),
-              rating: movie.vote_average || 0,
-              year: movie.release_date?.split('-')[0] || 'N/A',
-              imdb: detailData?.external_ids?.imdb_id || `tmdb_${movie.id}`,
-              type: 'Movie'
+              id: show.id,
+              title: show.name || 'Unknown Title',
+              overview: show.overview || 'No description available',
+              backdrop: getImageUrl(show.backdrop_path || show.poster_path, 'backdrop'),
+              poster: getImageUrl(show.poster_path, 'poster'),
+              rating: show.vote_average || 0,
+              year: show.first_air_date?.split('-')[0] || 'N/A',
+              imdb: detailData?.external_ids?.imdb_id || `tmdb_${show.id}`,
+              type: 'tv'
             };
           } catch (error) {
-            console.error(`Error fetching details for movie ${sanitizeForLog(movie.id)}:`, sanitizeForLog(error.message));
+            console.error(`Error fetching details for show ${sanitizeForLog(show.id)}:`, sanitizeForLog(error.message));
             return {
-              id: movie.id,
-              title: movie.title || 'Unknown Title',
-              overview: movie.overview || 'No description available',
-              backdrop: getImageUrl(movie.backdrop_path || movie.poster_path, 'backdrop'),
-              poster: getImageUrl(movie.poster_path, 'poster'),
-              rating: movie.vote_average || 0,
-              year: movie.release_date?.split('-')[0] || 'N/A',
-              imdb: `tmdb_${movie.id}`,
-              type: 'Movie'
+              id: show.id,
+              title: show.name || 'Unknown Title',
+              overview: show.overview || 'No description available',
+              backdrop: getImageUrl(show.backdrop_path || show.poster_path, 'backdrop'),
+              poster: getImageUrl(show.poster_path, 'poster'),
+              rating: show.vote_average || 0,
+              year: show.first_air_date?.split('-')[0] || 'N/A',
+              imdb: `tmdb_${show.id}`,
+              type: 'tv'
             };
           }
         })
@@ -150,7 +151,10 @@ const Home = () => {
                   <span>Watch Now</span>
                 </button>
                 
-                <button className="bg-white/20 text-white border border-white/30 px-6 py-3 rounded-lg text-sm font-medium cursor-pointer hover:bg-white/30 transition-colors backdrop-blur-sm min-w-[100px] h-[40px] flex items-center justify-center gap-2">
+                <button 
+                  className="bg-white/20 text-white border border-white/30 px-6 py-3 rounded-lg text-sm font-medium cursor-pointer hover:bg-white/30 transition-colors backdrop-blur-sm min-w-[100px] h-[40px] flex items-center justify-center gap-2"
+                  onClick={() => window.location.href = `/tv/${currentMovie?.id}`}
+                >
                   <Info size={16} />
                   <span>More Info</span>
                 </button>
@@ -212,49 +216,24 @@ const Home = () => {
         </div>
       </main>
 
-      {/* Movie Player Modal */}
-      <AnimatePresence>
-        {selectedMovie && (
-          <motion.div 
-            className="fixed top-0 left-0 w-full h-full bg-black/90 flex justify-center items-center z-50" 
-            onClick={() => setSelectedMovie(null)}
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-          >
-            <motion.div 
-              className="w-[90%] max-w-4xl h-[60vh] md:h-[450px] rounded-xl overflow-hidden" 
-              onClick={e => e.stopPropagation()}
-              initial={{ scale: 0.8, opacity: 0 }}
-              animate={{ scale: 1, opacity: 1 }}
-              exit={{ scale: 0.8, opacity: 0 }}
-              transition={{ type: "spring", damping: 25, stiffness: 300 }}
-            >
-              <iframe
-                src={(() => {
-                  const sanitizedId = sanitizeForLog(selectedMovie.imdb.startsWith('tt') 
-                    ? selectedMovie.imdb 
-                    : selectedMovie.imdb.replace('tmdb_', ''));
-                  
-                  // Handle different content types
-                  switch (selectedMovie.type) {
-                    case 'tv':
-                      return `https://vidsrc.cc/v2/embed/tv/${sanitizedId}/1/1?autoPlay=false`;
-                    default:
-                      return `https://vidsrc.cc/v2/embed/movie/${sanitizedId}?autoPlay=false`;
-                  }
-                })()}
-                title={selectedMovie.title}
-                frameBorder="0"
-                allowFullScreen
-                className="w-full h-full"
-              />
-            </motion.div>
-          </motion.div>
-        )}
-      </AnimatePresence>
+
 
       {/* Footer */}
+      {/* Movie Player Modal */}
+      {selectedMovie && (
+        <div className="fixed inset-0 bg-black/90 flex items-center justify-center z-50" onClick={() => setSelectedMovie(null)}>
+          <div className="w-[90%] max-w-4xl h-[60vh] md:h-[450px] rounded-xl overflow-hidden" onClick={e => e.stopPropagation()}>
+            <iframe
+              src={`https://vidsrc.cc/v2/embed/tv/${selectedMovie.imdb.startsWith('tt') ? selectedMovie.imdb : selectedMovie.id}/1/1`}
+              title={selectedMovie.title}
+              frameBorder="0"
+              allowFullScreen
+              className="w-full h-full"
+            />
+          </div>
+        </div>
+      )}
+
       <Footer />
     </div>
   );

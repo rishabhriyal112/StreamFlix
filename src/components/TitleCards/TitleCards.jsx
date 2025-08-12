@@ -6,8 +6,12 @@ import PropTypes from 'prop-types';
 import { addToWatchlist, removeFromWatchlist, isInWatchlist } from '../../utils/wishlist';
 
 // Constants
-const API_KEY = '8265bd1679663a7ea12ac168da84d2e8'; // Move to .env in production
+const API_KEY = import.meta.env.VITE_TMDB_EXTERNAL_SERVICE_AUTH_TOKEN;
 const BASE_URL = 'https://api.themoviedb.org/3';
+
+if (!API_KEY) {
+  console.error('TMDB API key not found in environment variables');
+}
 const MAX_MOVIES = 12;
 const CACHE_KEY_PREFIX = 'movies_';
 
@@ -181,11 +185,9 @@ const TitleCards = ({ title, category = 'movie' }) => {
                     className="flex items-center gap-1 bg-red-600 text-white px-2 py-1 rounded text-xs font-semibold hover:bg-red-700 transition-colors"
                     onClick={(e) => {
                       e.stopPropagation();
-                      if (movie.type === 'tv') {
-                        navigate(`/player/tv/${movie.id}`);
-                      } else {
-                        navigate(`/player/${movie.id}`);
-                      }
+                      // This will be handled by parent component's modal
+                      const event = new CustomEvent('playMovie', { detail: movie });
+                      window.dispatchEvent(event);
                     }}
                   >
                     <Play size={10} fill="currentColor" />

@@ -16,8 +16,12 @@ const Search = () => {
   const [defaultMovies, setDefaultMovies] = useState([]);
   const [defaultLoading, setDefaultLoading] = useState(true);
 
-  const API_KEY = '8265bd1679663a7ea12ac168da84d2e8';
+  const API_KEY = import.meta.env.VITE_TMDB_EXTERNAL_SERVICE_AUTH_TOKEN;
   const BASE_URL = 'https://api.themoviedb.org/3';
+
+  if (!API_KEY) {
+    console.error('TMDB API key not found in environment variables');
+  }
 
   const fetchSuggestions = async (query) => {
     if (!query.trim() || query.length < 2) {
@@ -257,9 +261,9 @@ const Search = () => {
     <div className="min-h-screen bg-black">
       <Navbar />
       
-      <div className="pt-24 pb-12 px-6 md:px-[6%]">
+      <div className="pt-20 md:pt-24 pb-12 px-4 md:px-6 lg:px-[6%]">
         <motion.div 
-          className="mb-10 relative"
+          className="mb-8 md:mb-10 relative"
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6 }}
@@ -271,7 +275,7 @@ const Search = () => {
             onChange={(e) => setSearchQuery(e.target.value)}
             onFocus={() => suggestions.length > 0 && setShowSuggestions(true)}
             onBlur={() => setTimeout(() => setShowSuggestions(false), 200)}
-            className="w-full max-w-2xl px-5 py-4 text-base bg-white/10 border border-white/30 rounded-lg text-white outline-none placeholder:text-white/70 focus:border-white focus:bg-white/15 transition-all"
+            className="w-full max-w-2xl px-4 md:px-5 py-3 md:py-4 text-sm md:text-base bg-white/10 border border-white/30 rounded-lg text-white outline-none placeholder:text-white/70 focus:border-white focus:bg-white/15 transition-all"
           />
           {showSuggestions && suggestions.length > 0 && (
             <motion.div 
@@ -328,7 +332,10 @@ const Search = () => {
                       <p className="text-white/80 text-sm mb-2">{movie.year} • {movie.type}</p>
                       <motion.button 
                         className="bg-red-600 text-white border-0 px-4 py-2 rounded cursor-pointer font-semibold transition-colors hover:bg-red-700 flex items-center gap-2"
-                        onClick={(e) => { e.stopPropagation(); setSelectedMovie(movie); }}
+                        onClick={(e) => { 
+                          e.stopPropagation(); 
+                          setSelectedMovie(movie);
+                        }}
                         whileHover={{ scale: 1.05 }}
                         whileTap={{ scale: 0.95 }}
                       >
@@ -372,7 +379,10 @@ const Search = () => {
                       <p className="text-white/80 text-sm mb-2">{movie.year} • {movie.type}</p>
                       <motion.button 
                         className="bg-red-600 text-white border-0 px-4 py-2 rounded cursor-pointer font-semibold transition-colors hover:bg-red-700 flex items-center gap-2"
-                        onClick={(e) => { e.stopPropagation(); setSelectedMovie(movie); }}
+                        onClick={(e) => { 
+                          e.stopPropagation(); 
+                          setSelectedMovie(movie);
+                        }}
                         whileHover={{ scale: 1.05 }}
                         whileTap={{ scale: 0.95 }}
                       >
@@ -388,32 +398,22 @@ const Search = () => {
       </div>
 
       {selectedMovie && (
-        <motion.div 
-          className="fixed top-0 left-0 w-full h-full bg-black/90 flex justify-center items-center z-50" 
-          onClick={() => setSelectedMovie(null)}
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          exit={{ opacity: 0 }}
-        >
-          <motion.div 
-            className="w-[90%] max-w-4xl h-96 md:h-[450px] rounded-xl overflow-hidden" 
-            onClick={e => e.stopPropagation()}
-            initial={{ scale: 0.8 }}
-            animate={{ scale: 1 }}
-            exit={{ scale: 0.8 }}
-          >
+        <div className="fixed inset-0 bg-black/90 flex items-center justify-center z-50" onClick={() => setSelectedMovie(null)}>
+          <div className="w-[90%] max-w-4xl h-[60vh] md:h-[450px] rounded-xl overflow-hidden" onClick={e => e.stopPropagation()}>
             <iframe
-              src={selectedMovie.imdb.startsWith('tt') 
-                ? `https://vidsrc.cc/v2/embed/${selectedMovie.type === 'TV Series' ? 'tv' : 'movie'}/${selectedMovie.imdb}?autoPlay=false`
-                : `https://vidsrc.cc/v2/embed/${selectedMovie.type === 'TV Series' ? 'tv' : 'movie'}/${selectedMovie.imdb.replace('tmdb_', '')}?autoPlay=false`
-              }
+              src={(() => {
+                const movieId = selectedMovie.imdb.startsWith('tt') ? selectedMovie.imdb : selectedMovie.id;
+                return selectedMovie.type === 'TV Series' 
+                  ? `https://vidsrc.cc/v2/embed/tv/${movieId}/1/1`
+                  : `https://vidsrc.cc/v2/embed/movie/${movieId}`;
+              })()}
               title={selectedMovie.title}
               frameBorder="0"
               allowFullScreen
               className="w-full h-full"
             />
-          </motion.div>
-        </motion.div>
+          </div>
+        </div>
       )}
 
       <Footer />
