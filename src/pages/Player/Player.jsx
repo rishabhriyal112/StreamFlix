@@ -4,7 +4,6 @@ import { motion } from 'framer-motion';
 import { ArrowLeft, Maximize, Volume2, VolumeX, Play, Pause } from 'lucide-react';
 import { secureFetch, getMovieDetailsEndpoint, getTVDetailsEndpoint, sanitizeForLog } from '../../utils/api';
 import Popunder from '../../components/Popunder/Popunder';
-import SocialBar from '../../components/SocialBar/SocialBar';
 
 const Player = () => {
   const { id } = useParams();
@@ -192,7 +191,6 @@ const Player = () => {
         </div>
       </motion.div>
       <Popunder />
-      <SocialBar />
     </div>
   );
 };

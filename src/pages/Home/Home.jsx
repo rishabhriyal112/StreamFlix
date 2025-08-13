@@ -4,11 +4,13 @@ import Footer from "../../components/Footer/Footer";
 import AdBanner from "../../components/AdBanner/AdBanner";
 import SocialBar from "../../components/SocialBar/SocialBar";
 import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { Play, Info, Star, Calendar, ChevronLeft, ChevronRight } from "lucide-react";
 import { secureFetch, getMovieEndpoint, getMovieDetailsEndpoint, getImageUrl, sanitizeForLog } from "../../utils/api";
 
 const Home = () => {
+  const navigate = useNavigate();
   const [heroMovies, setHeroMovies] = useState([]);
   const [currentSlide, setCurrentSlide] = useState(0);
 
@@ -155,7 +157,7 @@ const Home = () => {
                 
                 <button 
                   className="bg-white/20 text-white border border-white/30 px-6 py-3 rounded-lg text-sm font-medium cursor-pointer hover:bg-white/30 transition-colors backdrop-blur-sm min-w-[100px] h-[40px] flex items-center justify-center gap-2"
-                  onClick={() => window.location.href = `/tv/${currentMovie?.id}`}
+                  onClick={() => navigate(`/tv/${currentMovie?.id}`)}
                 >
                   <Info size={16} />
                   <span>More Info</span>
@@ -209,7 +211,7 @@ const Home = () => {
               <AdBanner />
               <div className="text-center mt-12">
                 <button 
-                  onClick={() => window.location.href = '/trending'}
+                  onClick={() => navigate('/trending')}
                   className="bg-red-600 text-white px-8 py-3 rounded-lg hover:bg-red-700 transition-colors font-semibold"
                 >
                   View All Trending Content

@@ -155,7 +155,7 @@ const Movies = () => {
                 
                 <button 
                   className="bg-white/20 text-white border border-white/30 px-6 py-3 rounded-lg text-sm font-medium cursor-pointer hover:bg-white/30 transition-colors backdrop-blur-sm min-w-[100px] h-[40px] flex items-center justify-center gap-2"
-                  onClick={() => window.location.href = `/movie/${currentMovie?.id}`}
+                  onClick={() => navigate(`/movie/${currentMovie?.id}`)}
                 >
                   <Info size={16} />
                   <span>More Info</span>
