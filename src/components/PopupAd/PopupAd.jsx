@@ -17,7 +17,7 @@ const PopupAd = () => {
 
   return (
     <div className="fixed inset-0 bg-black/80 flex items-center justify-center z-50">
-      <div className="bg-white rounded-lg p-4 relative max-w-sm mx-4">
+      <div className="bg-white rounded-lg p-4 relative w-[320px] mx-4">
         <button
           onClick={() => setIsVisible(false)}
           className="absolute top-2 right-2 text-gray-500 hover:text-gray-700"
@@ -30,7 +30,7 @@ const PopupAd = () => {
         </div>
         
         <div 
-          className="w-[300px] h-[250px] mx-auto"
+          className="w-[300px] h-[250px] mx-auto overflow-hidden"
           dangerouslySetInnerHTML={{
             __html: `
               <script type="text/javascript">
