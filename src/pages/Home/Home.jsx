@@ -1,6 +1,8 @@
 import Navbar from "../../components/Navbar/Navbar";
 import TitleCards from "../../components/TitleCards/TitleCards";
 import Footer from "../../components/Footer/Footer";
+import AdBanner from "../../components/AdBanner/AdBanner";
+import SocialBar from "../../components/SocialBar/SocialBar";
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Play, Info, Star, Calendar, ChevronLeft, ChevronRight } from "lucide-react";
@@ -202,7 +204,9 @@ const Home = () => {
           <div className="container mx-auto px-4 md:px-6 lg:px-8">
             <div className="space-y-12 md:space-y-16">
               <TitleCards title="Trending Movies" category="movie" />
+              <AdBanner />
               <TitleCards title="Popular TV Shows" category="tv" />
+              <AdBanner />
               <div className="text-center mt-12">
                 <button 
                   onClick={() => window.location.href = '/trending'}
@@ -234,6 +238,7 @@ const Home = () => {
         </div>
       )}
 
+      <SocialBar />
       <Footer />
     </div>
   );

@@ -4,6 +4,7 @@ import { motion } from 'framer-motion';
 import { Play } from 'lucide-react';
 import Navbar from '../../components/Navbar/Navbar';
 import Footer from '../../components/Footer/Footer';
+import SocialBar from '../../components/SocialBar/SocialBar';
 
 const Search = () => {
   const navigate = useNavigate();
@@ -432,6 +433,7 @@ const Search = () => {
         </div>
       )}
 
+      <SocialBar />
       <Footer />
     </div>
   );

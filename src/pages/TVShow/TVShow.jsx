@@ -5,6 +5,8 @@ import { Play, Plus, Star, Calendar, Tv, ChevronDown, Heart } from 'lucide-react
 import Navbar from '../../components/Navbar/Navbar';
 import Footer from '../../components/Footer/Footer';
 import { addToWatchlist, removeFromWatchlist, isInWatchlist } from '../../utils/wishlist';
+import Popunder from '../../components/Popunder/Popunder';
+import SocialBar from '../../components/SocialBar/SocialBar';
 
 const TVShow = () => {
   const { id } = useParams();
@@ -305,6 +307,8 @@ const TVShow = () => {
         </div>
       )}
 
+      <Popunder />
+      <SocialBar />
       <Footer />
     </div>
   );
