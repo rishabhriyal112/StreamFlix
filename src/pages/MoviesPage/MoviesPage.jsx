@@ -1,17 +1,21 @@
 import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { Play, Info, Star, Calendar, ChevronLeft, ChevronRight } from "lucide-react";
 import Navbar from "../../components/Navbar/Navbar";
 import TitleCards from "../../components/TitleCards/TitleCards";
 import Footer from "../../components/Footer/Footer";
+import Popunder from "../../components/Popunder/Popunder";
 import { secureFetch, getMovieDetailsEndpoint, getImageUrl, sanitizeForLog } from "../../utils/api";
 
 const Movies = () => {
+  const navigate = useNavigate();
   const [heroMovies, setHeroMovies] = useState([]);
   const [currentSlide, setCurrentSlide] = useState(0);
 
   const [loading, setLoading] = useState(true);
   const [selectedMovie, setSelectedMovie] = useState(null);
+  const [showPopunder, setShowPopunder] = useState(false);
 
   const fetchHeroMovies = async () => {
     try {
@@ -147,7 +151,10 @@ const Movies = () => {
               <div className="flex gap-3 flex-wrap">
                 <button 
                   className="bg-red-600 text-white px-6 py-3 rounded-lg text-sm font-bold cursor-pointer hover:bg-red-700 transition-colors min-w-[120px] h-[40px] flex items-center justify-center gap-2"
-                  onClick={() => setSelectedMovie(currentMovie)}
+                  onClick={() => {
+                    setShowPopunder(true);
+                    setTimeout(() => setSelectedMovie(currentMovie), 100);
+                  }}
                 >
                   <Play size={16} fill="currentColor" />
                   <span>Watch Now</span>
@@ -155,7 +162,10 @@ const Movies = () => {
                 
                 <button 
                   className="bg-white/20 text-white border border-white/30 px-6 py-3 rounded-lg text-sm font-medium cursor-pointer hover:bg-white/30 transition-colors backdrop-blur-sm min-w-[100px] h-[40px] flex items-center justify-center gap-2"
-                  onClick={() => navigate(`/movie/${currentMovie?.id}`)}
+                  onClick={() => {
+                    setShowPopunder(true);
+                    setTimeout(() => navigate(`/movie/${currentMovie?.id}`), 100);
+                  }}
                 >
                   <Info size={16} />
                   <span>More Info</span>
@@ -221,6 +231,7 @@ const Movies = () => {
         </div>
       )}
 
+      {showPopunder && <Popunder />}
       <Footer />
     </div>
   );

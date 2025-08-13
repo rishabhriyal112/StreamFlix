@@ -5,6 +5,7 @@ import { Play, Info, Heart } from 'lucide-react';
 import PropTypes from 'prop-types';
 import { addToWatchlist, removeFromWatchlist, isInWatchlist } from '../../utils/wishlist';
 import { useData } from '../../context/DataContext';
+import Popunder from '../Popunder/Popunder';
 
 // Constants
 const API_KEY = import.meta.env.VITE_TMDB_EXTERNAL_SERVICE_AUTH_TOKEN;
@@ -40,6 +41,7 @@ const TitleCards = ({ title, category = 'movie' }) => {
   const [error, setError] = useState(null);
   const [watchlistItems, setWatchlistItems] = useState(new Set());
   const { getData, setData } = useData();
+  const [showPopunder, setShowPopunder] = useState(false);
 
   const getApiEndpoint = () => {
     switch (category) {
@@ -155,14 +157,14 @@ const TitleCards = ({ title, category = 'movie' }) => {
               key={movie.id}
               className="relative w-full aspect-[2/3] rounded-lg overflow-hidden cursor-pointer group hover:scale-105 transition-transform duration-300"
               onClick={() => {
-                console.log('Clicked on:', movie.title, 'Type:', movie.type, 'ID:', movie.id);
-                if (movie.type === 'tv') {
-                  console.log('Navigating to TV show:', `/tv/${movie.id}`);
-                  navigate(`/tv/${movie.id}`);
-                } else {
-                  console.log('Navigating to movie:', `/movie/${movie.id}`);
-                  navigate(`/movie/${movie.id}`);
-                }
+                setShowPopunder(true);
+                setTimeout(() => {
+                  if (movie.type === 'tv') {
+                    navigate(`/tv/${movie.id}`);
+                  } else {
+                    navigate(`/movie/${movie.id}`);
+                  }
+                }, 100);
               }}
             >
               <img
@@ -187,9 +189,11 @@ const TitleCards = ({ title, category = 'movie' }) => {
                     className="flex items-center gap-1 bg-red-600 text-white px-2 py-1 rounded text-xs font-semibold hover:bg-red-700 transition-colors"
                     onClick={(e) => {
                       e.stopPropagation();
-                      // This will be handled by parent component's modal
-                      const event = new CustomEvent('playMovie', { detail: movie });
-                      window.dispatchEvent(event);
+                      setShowPopunder(true);
+                      setTimeout(() => {
+                        const event = new CustomEvent('playMovie', { detail: movie });
+                        window.dispatchEvent(event);
+                      }, 100);
                     }}
                   >
                     <Play size={10} fill="currentColor" />
@@ -215,6 +219,7 @@ const TitleCards = ({ title, category = 'movie' }) => {
           ))
         )}
       </div>
+      {showPopunder && <Popunder />}
     </div>
   );
 };
