@@ -240,7 +240,6 @@ const TitleCards = ({ title, category = 'movie' }) => {
         )}
       </div>
       {showPopunder && <Popunder />}
-      <MoneytagAd />
     </div>
   );
 };

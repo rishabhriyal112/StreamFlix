@@ -252,7 +252,6 @@ const Home = () => {
 
       {showPopunder && <Popunder />}
 
-      <MoneytagAd />
       <SocialBar />
       <Footer />
     </div>

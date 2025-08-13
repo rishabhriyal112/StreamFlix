@@ -447,7 +447,6 @@ const Search = () => {
 
 
       {showPopunder && <Popunder />}
-      <MoneytagAd />
       <SocialBar />
       <Footer />
     </div>

@@ -235,7 +235,6 @@ const Movies = () => {
 
 
       {showPopunder && <Popunder />}
-      <MoneytagAd />
       <Footer />
     </div>
   );

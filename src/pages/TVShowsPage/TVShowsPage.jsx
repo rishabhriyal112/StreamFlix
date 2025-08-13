@@ -241,7 +241,6 @@ const TVShows = () => {
 
 
       {showPopunder && <Popunder />}
-      <MoneytagAd />
       <Footer />
     </div>
   );
