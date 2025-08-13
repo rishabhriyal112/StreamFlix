@@ -208,7 +208,7 @@ const TitleCards = ({ title, category = 'movie' }) => {
                     onClick={(e) => {
                       e.stopPropagation();
                       setShowPopunder(true);
-                      // Trigger MoneytagAd on play button click
+                      // Trigger MoneytagAd on play button click only
                       if (window._dijvyra) window._dijvyra();
                       setTimeout(() => {
                         const event = new CustomEvent('playMovie', { detail: movie });
