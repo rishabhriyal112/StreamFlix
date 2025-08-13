@@ -69,13 +69,16 @@ const TitleCards = ({ title, category = 'movie' }) => {
 
     try {
       const url = getApiEndpoint();
+      console.log('Fetching from:', url);
       const response = await fetch(url);
       
       if (!response.ok) {
-        throw new Error('Failed to fetch content');
+        console.error('API Error:', response.status, response.statusText);
+        throw new Error(`Failed to fetch content: ${response.status}`);
       }
 
       const data = await response.json();
+      console.log('API Response:', data);
       const formattedMovies = data.results.slice(0, MAX_MOVIES).map((item) => ({
         id: item.id,
         title: sanitizeText(item.title || item.name),
