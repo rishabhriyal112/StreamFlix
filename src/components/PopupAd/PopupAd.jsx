@@ -29,23 +29,18 @@ const PopupAd = () => {
           <h3 className="text-lg font-bold text-gray-800">Advertisement</h3>
         </div>
         
-        <div 
-          className="w-[300px] h-[250px] mx-auto overflow-hidden"
-          dangerouslySetInnerHTML={{
-            __html: `
-              <script type="text/javascript">
-                atOptions = {
-                  'key' : '4e3f7199b144acdfd55b75afe5e4cdbc',
-                  'format' : 'iframe',
-                  'height' : 250,
-                  'width' : 300,
-                  'params' : {}
-                };
-              </script>
-              <script type="text/javascript" src="//outlawcontinuing.com/4e3f7199b144acdfd55b75afe5e4cdbc/invoke.js"></script>
-            `
-          }}
-        />
+        <div className="w-[300px] h-[250px] mx-auto overflow-hidden bg-gray-100 flex items-center justify-center">
+          <a 
+            href="https://outlawcontinuing.com/4e3f7199b144acdfd55b75afe5e4cdbc/invoke.js" 
+            target="_blank" 
+            rel="noopener noreferrer"
+            className="w-full h-full flex flex-col items-center justify-center text-gray-600 hover:bg-gray-200 transition-colors"
+          >
+            <div className="text-4xl mb-2">🎬</div>
+            <div className="text-sm font-semibold">StreamFlix Premium</div>
+            <div className="text-xs">Click to Learn More</div>
+          </a>
+        </div>
       </div>
     </div>
   );
