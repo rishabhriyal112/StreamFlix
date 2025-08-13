@@ -6,6 +6,7 @@ import PropTypes from 'prop-types';
 import { addToWatchlist, removeFromWatchlist, isInWatchlist } from '../../utils/wishlist';
 import { useData } from '../../context/DataContext';
 import Popunder from '../Popunder/Popunder';
+import { clearCorruptedCache } from '../../utils/cache';
 
 // Constants
 const API_KEY = import.meta.env.VITE_TMDB_EXTERNAL_SERVICE_AUTH_TOKEN;
@@ -59,15 +60,20 @@ const TitleCards = ({ title, category = 'movie' }) => {
     setError(null);
     const cacheKey = `${category}_${title || 'popular'}_${Date.now()}`;
 
-    // Check localStorage cache first
-    const cachedData = localStorage.getItem(cacheKey.replace(/_\d+$/, ''));
-    if (cachedData) {
-      const parsed = JSON.parse(cachedData);
-      if (Date.now() - parsed.timestamp < 300000) { // 5 minutes cache
-        setMovies(parsed.data);
-        setLoading(false);
-        return;
+    // Check localStorage cache first with fallback
+    try {
+      const cachedData = localStorage.getItem(cacheKey.replace(/_\d+$/, '')) || null;
+      if (cachedData) {
+        const parsed = JSON.parse(cachedData);
+        if (parsed.timestamp && Date.now() - parsed.timestamp < 300000) {
+          setMovies(parsed.data || []);
+          setLoading(false);
+          return;
+        }
       }
+    } catch (error) {
+      console.log('Cache error, clearing:', error);
+      localStorage.removeItem(cacheKey.replace(/_\d+$/, ''));
     }
 
     try {
@@ -81,7 +87,9 @@ const TitleCards = ({ title, category = 'movie' }) => {
       const response = await fetch(url);
       
       if (!response.ok) {
+        console.error('API Error:', response.status, response.statusText);
         if (response.status === 503 && retryCount < 3) {
+          console.log(`Retrying... attempt ${retryCount + 1}`);
           return fetchMovies(retryCount + 1);
         }
         throw new Error(`API Error: ${response.status}`);
@@ -100,20 +108,26 @@ const TitleCards = ({ title, category = 'movie' }) => {
         type: category,
       }));
 
-      // Cache the data
-      localStorage.setItem(cacheKey.replace(/_\d+$/, ''), JSON.stringify({
-        data: formattedMovies,
-        timestamp: Date.now()
-      }));
+      // Cache the data with error handling
+      try {
+        localStorage.setItem(cacheKey.replace(/_\d+$/, ''), JSON.stringify({
+          data: formattedMovies,
+          timestamp: Date.now()
+        }));
+      } catch (error) {
+        console.log('Cache storage failed:', error);
+      }
 
       setMovies(formattedMovies);
       setData(cacheKey, formattedMovies);
     } catch (error) {
       console.error('Error fetching content:', error);
       if (error.message.includes('503')) {
-        setError('TMDB service temporarily unavailable. Showing cached content if available.');
+        setError('TMDB service temporarily unavailable. Please refresh the page.');
+      } else if (error.name === 'TypeError') {
+        setError('Network error. Please check your connection.');
       } else {
-        setError('Failed to load content. Please try again later.');
+        setError('Failed to load content. Please clear browser cache and try again.');
       }
       setMovies([]);
     } finally {
@@ -122,6 +136,9 @@ const TitleCards = ({ title, category = 'movie' }) => {
   };
 
   useEffect(() => {
+    // Clear corrupted cache on mount
+    clearCorruptedCache();
+    
     // Debounce API calls
     const timer = setTimeout(() => {
       fetchMovies();
