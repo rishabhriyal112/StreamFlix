@@ -4,6 +4,8 @@ import Footer from "../../components/Footer/Footer";
 import AdBanner from "../../components/AdBanner/AdBanner";
 import SocialBar from "../../components/SocialBar/SocialBar";
 import Popunder from "../../components/Popunder/Popunder";
+import BannerAd from "../../components/BannerAd/BannerAd";
+import GoogleAdsense from "../../components/GoogleAdsense/GoogleAdsense";
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
@@ -214,9 +216,9 @@ const Home = () => {
           <div className="container mx-auto px-4 md:px-6 lg:px-8">
             <div className="space-y-12 md:space-y-16">
               <TitleCards title="Trending Movies" category="movie" />
-              <AdBanner />
+              <BannerAd position="content" />
+              <GoogleAdsense />
               <TitleCards title="Popular TV Shows" category="tv" />
-              <AdBanner />
               <div className="text-center mt-12">
                 <button 
                   onClick={() => navigate('/trending')}
@@ -248,6 +250,8 @@ const Home = () => {
         </div>
       )}
 
+      <BannerAd position="footer" />
+      {showPopunder && <Popunder />}
       <SocialBar />
       <Footer />
     </div>
