@@ -1,15 +1,15 @@
 import Navbar from "../../components/Navbar/Navbar";
 import TitleCards from "../../components/TitleCards/TitleCards";
 import Footer from "../../components/Footer/Footer";
-import AdBanner from "../../components/AdBanner/AdBanner";
+
 import SocialBar from "../../components/SocialBar/SocialBar";
 import Popunder from "../../components/Popunder/Popunder";
 import BannerAd from "../../components/BannerAd/BannerAd";
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion } from "framer-motion";
 import { Play, Info, Star, Calendar, ChevronLeft, ChevronRight } from "lucide-react";
-import { secureFetch, getMovieEndpoint, getMovieDetailsEndpoint, getImageUrl, sanitizeForLog } from "../../utils/api";
+import { secureFetch, getImageUrl, sanitizeForLog } from "../../utils/api";
 
 const Home = () => {
   const navigate = useNavigate();

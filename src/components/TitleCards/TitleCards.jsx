@@ -1,7 +1,6 @@
 import { useRef, useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { motion, AnimatePresence } from 'framer-motion';
-import { Play, Info, Heart } from 'lucide-react';
+import { Play, Heart } from 'lucide-react';
 import PropTypes from 'prop-types';
 import { addToWatchlist, removeFromWatchlist, isInWatchlist } from '../../utils/wishlist';
 import { useData } from '../../context/DataContext';
@@ -16,7 +15,6 @@ if (!API_KEY) {
   console.error('TMDB API key not found in environment variables');
 }
 const MAX_MOVIES = 12;
-const CACHE_KEY_PREFIX = 'movies_';
 
 // Utility function to generate image URLs
 const getImageUrl = (path, type = 'poster') => {
