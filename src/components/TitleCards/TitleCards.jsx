@@ -5,7 +5,7 @@ import PropTypes from 'prop-types';
 import { addToWatchlist, removeFromWatchlist, isInWatchlist } from '../../utils/wishlist';
 import { useData } from '../../context/DataContext';
 import Popunder from '../Popunder/Popunder';
-import { clearCorruptedCache } from '../../utils/cache';
+
 
 // Constants
 const API_KEY = import.meta.env.VITE_TMDB_EXTERNAL_SERVICE_AUTH_TOKEN;
@@ -58,21 +58,7 @@ const TitleCards = ({ title, category = 'movie' }) => {
     setError(null);
     const baseCacheKey = `${category}_${title || 'popular'}`;
 
-    // Check localStorage cache first with fallback
-    try {
-      const cachedData = localStorage.getItem(baseCacheKey) || null;
-      if (cachedData) {
-        const parsed = JSON.parse(cachedData);
-        if (parsed.timestamp && Date.now() - parsed.timestamp < 300000) {
-          setMovies(parsed.data || []);
-          setLoading(false);
-          return;
-        }
-      }
-    } catch (error) {
-      console.log('Cache error, clearing:', error);
-      localStorage.removeItem(baseCacheKey);
-    }
+    // Skip localStorage caching to prevent storage full issues
 
     try {
       const url = getApiEndpoint();
@@ -106,15 +92,7 @@ const TitleCards = ({ title, category = 'movie' }) => {
         type: category,
       }));
 
-      // Cache the data with error handling
-      try {
-        localStorage.setItem(baseCacheKey, JSON.stringify({
-          data: formattedMovies,
-          timestamp: Date.now()
-        }));
-      } catch (error) {
-        console.log('Cache storage failed:', error);
-      }
+      // No localStorage caching to prevent storage issues
 
       setMovies(formattedMovies);
       setData(baseCacheKey, formattedMovies);
@@ -134,9 +112,6 @@ const TitleCards = ({ title, category = 'movie' }) => {
   };
 
   useEffect(() => {
-    // Clear corrupted cache on mount
-    clearCorruptedCache();
-    
     // Debounce API calls
     const timer = setTimeout(() => {
       fetchMovies();
