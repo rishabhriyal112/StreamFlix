@@ -3,7 +3,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { ArrowLeft, Maximize, Volume2, VolumeX, Play, Pause } from 'lucide-react';
 import { secureFetch, getMovieDetailsEndpoint, getTVDetailsEndpoint, sanitizeForLog } from '../../utils/api';
-import Popunder from '../../components/Popunder/Popunder';
+
 
 const Player = () => {
   const { id } = useParams();
@@ -190,7 +190,7 @@ const Player = () => {
           </div>
         </div>
       </motion.div>
-      <Popunder />
+
     </div>
   );
 };

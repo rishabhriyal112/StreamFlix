@@ -5,7 +5,7 @@ import { Play, Info, Star, Calendar, Tv, ChevronLeft, ChevronRight } from "lucid
 import Navbar from "../../components/Navbar/Navbar";
 import TitleCards from "../../components/TitleCards/TitleCards";
 import Footer from "../../components/Footer/Footer";
-import Popunder from "../../components/Popunder/Popunder";
+
 
 import { secureFetch, getTVDetailsEndpoint, getImageUrl, sanitizeForLog } from "../../utils/api";
 import MoneytagAd from "../../components/MoneytagAd/MoneytagAd";
@@ -240,7 +240,7 @@ const TVShows = () => {
       )}
 
 
-      {showPopunder && <Popunder />}
+
       <Footer />
     </div>
   );

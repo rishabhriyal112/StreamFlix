@@ -5,7 +5,7 @@ import { Play } from 'lucide-react';
 import Navbar from '../../components/Navbar/Navbar';
 import Footer from '../../components/Footer/Footer';
 import SocialBar from '../../components/SocialBar/SocialBar';
-import Popunder from '../../components/Popunder/Popunder';
+
 
 import MoneytagAd from '../../components/MoneytagAd/MoneytagAd';
 
@@ -446,7 +446,7 @@ const Search = () => {
       )}
 
 
-      {showPopunder && <Popunder />}
+
       <SocialBar />
       <Footer />
     </div>

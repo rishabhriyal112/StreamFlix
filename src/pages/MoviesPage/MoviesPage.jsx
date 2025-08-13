@@ -5,7 +5,7 @@ import { Play, Info, Star, Calendar, ChevronLeft, ChevronRight } from "lucide-re
 import Navbar from "../../components/Navbar/Navbar";
 import TitleCards from "../../components/TitleCards/TitleCards";
 import Footer from "../../components/Footer/Footer";
-import Popunder from "../../components/Popunder/Popunder";
+
 
 import { secureFetch, getMovieDetailsEndpoint, getImageUrl, sanitizeForLog } from "../../utils/api";
 import MoneytagAd from "../../components/MoneytagAd/MoneytagAd";
@@ -234,7 +234,7 @@ const Movies = () => {
       )}
 
 
-      {showPopunder && <Popunder />}
+
       <Footer />
     </div>
   );

@@ -4,7 +4,7 @@ import { Play, Heart } from 'lucide-react';
 import PropTypes from 'prop-types';
 import { addToWatchlist, removeFromWatchlist, isInWatchlist } from '../../utils/wishlist';
 import { useData } from '../../context/DataContext';
-import Popunder from '../Popunder/Popunder';
+
 import MoneytagAd from '../MoneytagAd/MoneytagAd';
 
 
@@ -239,7 +239,7 @@ const TitleCards = ({ title, category = 'movie' }) => {
           ))
         )}
       </div>
-      {showPopunder && <Popunder />}
+
     </div>
   );
 };

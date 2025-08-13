@@ -5,7 +5,7 @@ import { Play, Plus, Star, Calendar, Clock, Heart } from 'lucide-react';
 import Navbar from '../../components/Navbar/Navbar';
 import Footer from '../../components/Footer/Footer';
 import { addToWatchlist, removeFromWatchlist, isInWatchlist } from '../../utils/wishlist';
-import Popunder from '../../components/Popunder/Popunder';
+
 import SocialBar from '../../components/SocialBar/SocialBar';
 
 const Movie = () => {
@@ -227,7 +227,7 @@ const Movie = () => {
         </div>
       )}
 
-      <Popunder />
+
       <SocialBar />
       <Footer />
     </div>

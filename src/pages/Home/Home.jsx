@@ -3,7 +3,7 @@ import TitleCards from "../../components/TitleCards/TitleCards";
 import Footer from "../../components/Footer/Footer";
 
 import SocialBar from "../../components/SocialBar/SocialBar";
-import Popunder from "../../components/Popunder/Popunder";
+
 
 
 import MoneytagAd from "../../components/MoneytagAd/MoneytagAd";
@@ -250,7 +250,7 @@ const Home = () => {
       )}
 
 
-      {showPopunder && <Popunder />}
+
 
       <SocialBar />
       <Footer />
