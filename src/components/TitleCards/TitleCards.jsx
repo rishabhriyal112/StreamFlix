@@ -4,6 +4,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Play, Info, Heart } from 'lucide-react';
 import PropTypes from 'prop-types';
 import { addToWatchlist, removeFromWatchlist, isInWatchlist } from '../../utils/wishlist';
+import { useData } from '../../context/DataContext';
 
 // Constants
 const API_KEY = import.meta.env.VITE_TMDB_EXTERNAL_SERVICE_AUTH_TOKEN;
@@ -38,6 +39,7 @@ const TitleCards = ({ title, category = 'movie' }) => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [watchlistItems, setWatchlistItems] = useState(new Set());
+  const { getData, setData } = useData();
 
   const getApiEndpoint = () => {
     switch (category) {
@@ -53,12 +55,12 @@ const TitleCards = ({ title, category = 'movie' }) => {
   const fetchMovies = async () => {
     setLoading(true);
     setError(null);
-    const cacheKey = `${CACHE_KEY_PREFIX}${category}_${title || 'popular'}`;
+    const cacheKey = `${category}_${title || 'popular'}`;
 
-    // Check cache first
-    const cachedData = sessionStorage.getItem(cacheKey);
+    // Check global cache first
+    const cachedData = getData(cacheKey);
     if (cachedData) {
-      setMovies(JSON.parse(cachedData));
+      setMovies(cachedData);
       setLoading(false);
       return;
     }
@@ -85,7 +87,7 @@ const TitleCards = ({ title, category = 'movie' }) => {
       }));
 
       setMovies(formattedMovies);
-      sessionStorage.setItem(cacheKey, JSON.stringify(formattedMovies));
+      setData(cacheKey, formattedMovies);
     } catch (error) {
       console.error('Error fetching content:', error);
       setError('Failed to load content. Please try again later.');
