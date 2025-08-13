@@ -155,7 +155,6 @@ const Home = () => {
                 <button 
                   className="bg-red-600 text-white px-6 py-3 rounded-lg text-sm font-bold cursor-pointer hover:bg-red-700 transition-colors min-w-[120px] h-[40px] flex items-center justify-center gap-2"
                   onClick={() => {
-                    setShowPopunder(true);
                     setTimeout(() => setSelectedMovie(currentMovie), 100);
                   }}
                 >
@@ -166,7 +165,6 @@ const Home = () => {
                 <button 
                   className="bg-white/20 text-white border border-white/30 px-6 py-3 rounded-lg text-sm font-medium cursor-pointer hover:bg-white/30 transition-colors backdrop-blur-sm min-w-[100px] h-[40px] flex items-center justify-center gap-2"
                   onClick={() => {
-                    setShowPopunder(true);
                     setTimeout(() => navigate(`/tv/${currentMovie?.id}`), 100);
                   }}
                 >

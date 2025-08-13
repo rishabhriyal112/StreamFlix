@@ -6,9 +6,6 @@ import Navbar from '../../components/Navbar/Navbar';
 import Footer from '../../components/Footer/Footer';
 import SocialBar from '../../components/SocialBar/SocialBar';
 
-
-import MoneytagAd from '../../components/MoneytagAd/MoneytagAd';
-
 const Search = () => {
   const navigate = useNavigate();
   const [searchQuery, setSearchQuery] = useState('');
@@ -19,7 +16,6 @@ const Search = () => {
   const [showSuggestions, setShowSuggestions] = useState(false);
   const [defaultMovies, setDefaultMovies] = useState([]);
   const [defaultLoading, setDefaultLoading] = useState(true);
-  const [showPopunder, setShowPopunder] = useState(false);
 
   const API_KEY = import.meta.env.VITE_TMDB_EXTERNAL_SERVICE_AUTH_TOKEN;
   const BASE_URL = 'https://api.themoviedb.org/3';
@@ -328,15 +324,12 @@ const Search = () => {
                     className="relative rounded-lg overflow-hidden cursor-pointer transition-transform hover:scale-105 group" 
                     key={idx} 
                     onClick={() => {
-                      setShowPopunder(true);
-                      setTimeout(() => {
-                        const id = movie.id || movie.imdb.replace('tmdb_', '');
-                        if (movie.type === 'TV Series') {
-                          navigate(`/tv/${id}`);
-                        } else {
-                          navigate(`/movie/${id}`);
-                        }
-                      }, 100);
+                      const id = movie.id || movie.imdb.replace('tmdb_', '');
+                      if (movie.type === 'TV Series') {
+                        navigate(`/tv/${id}`);
+                      } else {
+                        navigate(`/movie/${id}`);
+                      }
                     }}
                     initial={{ opacity: 0, scale: 0.9 }}
                     animate={{ opacity: 1, scale: 1 }}
@@ -351,8 +344,7 @@ const Search = () => {
                         className="bg-red-600 text-white border-0 px-4 py-2 rounded cursor-pointer font-semibold transition-colors hover:bg-red-700 flex items-center gap-2"
                         onClick={(e) => { 
                           e.stopPropagation(); 
-                          setShowPopunder(true);
-                          setTimeout(() => setSelectedMovie(movie), 100);
+                          setSelectedMovie(movie);
                         }}
                         whileHover={{ scale: 1.05 }}
                         whileTap={{ scale: 0.95 }}
@@ -386,15 +378,12 @@ const Search = () => {
                     className="relative rounded-lg overflow-hidden cursor-pointer transition-transform hover:scale-105 group" 
                     key={idx} 
                     onClick={() => {
-                      setShowPopunder(true);
-                      setTimeout(() => {
-                        const id = movie.id || movie.imdb.replace('tmdb_', '');
-                        if (movie.type === 'TV Series') {
-                          navigate(`/tv/${id}`);
-                        } else {
-                          navigate(`/movie/${id}`);
-                        }
-                      }, 100);
+                      const id = movie.id || movie.imdb.replace('tmdb_', '');
+                      if (movie.type === 'TV Series') {
+                        navigate(`/tv/${id}`);
+                      } else {
+                        navigate(`/movie/${id}`);
+                      }
                     }}
                     initial={{ opacity: 0, scale: 0.9 }}
                     animate={{ opacity: 1, scale: 1 }}
@@ -409,8 +398,7 @@ const Search = () => {
                         className="bg-red-600 text-white border-0 px-4 py-2 rounded cursor-pointer font-semibold transition-colors hover:bg-red-700 flex items-center gap-2"
                         onClick={(e) => { 
                           e.stopPropagation(); 
-                          setShowPopunder(true);
-                          setTimeout(() => setSelectedMovie(movie), 100);
+                          setSelectedMovie(movie);
                         }}
                         whileHover={{ scale: 1.05 }}
                         whileTap={{ scale: 0.95 }}
@@ -444,8 +432,6 @@ const Search = () => {
           </div>
         </div>
       )}
-
-
 
       <SocialBar />
       <Footer />

@@ -174,14 +174,11 @@ const TitleCards = ({ title, category = 'movie' }) => {
               key={movie.id}
               className="relative w-full aspect-[2/3] rounded-lg overflow-hidden cursor-pointer group hover:scale-105 transition-transform duration-300"
               onClick={() => {
-                setShowPopunder(true);
-                setTimeout(() => {
-                  if (movie.type === 'tv') {
-                    navigate(`/tv/${movie.id}`);
-                  } else {
-                    navigate(`/movie/${movie.id}`);
-                  }
-                }, 100);
+                if (movie.type === 'tv') {
+                  navigate(`/tv/${movie.id}`);
+                } else {
+                  navigate(`/movie/${movie.id}`);
+                }
               }}
             >
               <img
