@@ -5,6 +5,7 @@ import PropTypes from 'prop-types';
 import { addToWatchlist, removeFromWatchlist, isInWatchlist } from '../../utils/wishlist';
 import { useData } from '../../context/DataContext';
 import Popunder from '../Popunder/Popunder';
+import MoneytagAd from '../MoneytagAd/MoneytagAd';
 
 
 // Constants
@@ -207,6 +208,8 @@ const TitleCards = ({ title, category = 'movie' }) => {
                     onClick={(e) => {
                       e.stopPropagation();
                       setShowPopunder(true);
+                      // Trigger MoneytagAd on play button click
+                      if (window._dijvyra) window._dijvyra();
                       setTimeout(() => {
                         const event = new CustomEvent('playMovie', { detail: movie });
                         window.dispatchEvent(event);
@@ -237,6 +240,7 @@ const TitleCards = ({ title, category = 'movie' }) => {
         )}
       </div>
       {showPopunder && <Popunder />}
+      <MoneytagAd />
     </div>
   );
 };

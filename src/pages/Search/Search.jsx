@@ -6,7 +6,8 @@ import Navbar from '../../components/Navbar/Navbar';
 import Footer from '../../components/Footer/Footer';
 import SocialBar from '../../components/SocialBar/SocialBar';
 import Popunder from '../../components/Popunder/Popunder';
-import BannerAd from '../../components/BannerAd/BannerAd';
+
+import MoneytagAd from '../../components/MoneytagAd/MoneytagAd';
 
 const Search = () => {
   const navigate = useNavigate();
@@ -444,8 +445,9 @@ const Search = () => {
         </div>
       )}
 
-      <BannerAd position="footer" />
+
       {showPopunder && <Popunder />}
+      <MoneytagAd />
       <SocialBar />
       <Footer />
     </div>
