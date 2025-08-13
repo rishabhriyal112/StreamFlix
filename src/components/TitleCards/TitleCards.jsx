@@ -58,11 +58,11 @@ const TitleCards = ({ title, category = 'movie' }) => {
   const fetchMovies = async (retryCount = 0) => {
     setLoading(true);
     setError(null);
-    const cacheKey = `${category}_${title || 'popular'}_${Date.now()}`;
+    const baseCacheKey = `${category}_${title || 'popular'}`;
 
     // Check localStorage cache first with fallback
     try {
-      const cachedData = localStorage.getItem(cacheKey.replace(/_\d+$/, '')) || null;
+      const cachedData = localStorage.getItem(baseCacheKey) || null;
       if (cachedData) {
         const parsed = JSON.parse(cachedData);
         if (parsed.timestamp && Date.now() - parsed.timestamp < 300000) {
@@ -73,7 +73,7 @@ const TitleCards = ({ title, category = 'movie' }) => {
       }
     } catch (error) {
       console.log('Cache error, clearing:', error);
-      localStorage.removeItem(cacheKey.replace(/_\d+$/, ''));
+      localStorage.removeItem(baseCacheKey);
     }
 
     try {
@@ -110,7 +110,7 @@ const TitleCards = ({ title, category = 'movie' }) => {
 
       // Cache the data with error handling
       try {
-        localStorage.setItem(cacheKey.replace(/_\d+$/, ''), JSON.stringify({
+        localStorage.setItem(baseCacheKey, JSON.stringify({
           data: formattedMovies,
           timestamp: Date.now()
         }));
@@ -119,7 +119,7 @@ const TitleCards = ({ title, category = 'movie' }) => {
       }
 
       setMovies(formattedMovies);
-      setData(cacheKey, formattedMovies);
+      setData(baseCacheKey, formattedMovies);
     } catch (error) {
       console.error('Error fetching content:', error);
       if (error.message.includes('503')) {
