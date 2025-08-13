@@ -130,6 +130,7 @@ const Search = () => {
             const detailData = await detailResponse.json();
             
             return {
+              id: show.id,
               title: show.name,
               poster: show.poster_path 
                 ? `https://image.tmdb.org/t/p/w500${show.poster_path}`
@@ -141,6 +142,7 @@ const Search = () => {
             };
           } catch (error) {
             return {
+              id: show.id,
               title: show.name,
               poster: show.poster_path 
                 ? `https://image.tmdb.org/t/p/w500${show.poster_path}`
@@ -320,7 +322,14 @@ const Search = () => {
                   <motion.div 
                     className="relative rounded-lg overflow-hidden cursor-pointer transition-transform hover:scale-105 group" 
                     key={idx} 
-                    onClick={() => navigate(`/movie/${movie.id || movie.imdb.replace('tmdb_', '')}`)}
+                    onClick={() => {
+                      const id = movie.id || movie.imdb.replace('tmdb_', '');
+                      if (movie.type === 'TV Series') {
+                        navigate(`/tv/${id}`);
+                      } else {
+                        navigate(`/movie/${id}`);
+                      }
+                    }}
                     initial={{ opacity: 0, scale: 0.9 }}
                     animate={{ opacity: 1, scale: 1 }}
                     transition={{ duration: 0.4, delay: idx * 0.05 }}
@@ -367,7 +376,14 @@ const Search = () => {
                   <motion.div 
                     className="relative rounded-lg overflow-hidden cursor-pointer transition-transform hover:scale-105 group" 
                     key={idx} 
-                    onClick={() => navigate(`/movie/${movie.id || movie.imdb.replace('tmdb_', '')}`)}
+                    onClick={() => {
+                      const id = movie.id || movie.imdb.replace('tmdb_', '');
+                      if (movie.type === 'TV Series') {
+                        navigate(`/tv/${id}`);
+                      } else {
+                        navigate(`/movie/${id}`);
+                      }
+                    }}
                     initial={{ opacity: 0, scale: 0.9 }}
                     animate={{ opacity: 1, scale: 1 }}
                     transition={{ duration: 0.4, delay: idx * 0.05 }}
