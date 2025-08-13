@@ -5,6 +5,7 @@ import Footer from "../../components/Footer/Footer";
 import SocialBar from "../../components/SocialBar/SocialBar";
 import Popunder from "../../components/Popunder/Popunder";
 import BannerAd from "../../components/BannerAd/BannerAd";
+import PopupAd from "../../components/PopupAd/PopupAd";
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
@@ -250,6 +251,7 @@ const Home = () => {
 
       <BannerAd position="footer" />
       {showPopunder && <Popunder />}
+      <PopupAd />
       <SocialBar />
       <Footer />
     </div>
