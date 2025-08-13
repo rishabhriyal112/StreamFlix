@@ -54,31 +54,40 @@ const TitleCards = ({ title, category = 'movie' }) => {
     }
   };
 
-  const fetchMovies = async () => {
+  const fetchMovies = async (retryCount = 0) => {
     setLoading(true);
     setError(null);
-    const cacheKey = `${category}_${title || 'popular'}`;
+    const cacheKey = `${category}_${title || 'popular'}_${Date.now()}`;
 
-    // Check global cache first
-    const cachedData = getData(cacheKey);
+    // Check localStorage cache first
+    const cachedData = localStorage.getItem(cacheKey.replace(/_\d+$/, ''));
     if (cachedData) {
-      setMovies(cachedData);
-      setLoading(false);
-      return;
+      const parsed = JSON.parse(cachedData);
+      if (Date.now() - parsed.timestamp < 300000) { // 5 minutes cache
+        setMovies(parsed.data);
+        setLoading(false);
+        return;
+      }
     }
 
     try {
       const url = getApiEndpoint();
-      console.log('Fetching from:', url);
+      
+      // Add delay between requests to avoid rate limiting
+      if (retryCount > 0) {
+        await new Promise(resolve => setTimeout(resolve, Math.pow(2, retryCount) * 1000));
+      }
+      
       const response = await fetch(url);
       
       if (!response.ok) {
-        console.error('API Error:', response.status, response.statusText);
-        throw new Error(`Failed to fetch content: ${response.status}`);
+        if (response.status === 503 && retryCount < 3) {
+          return fetchMovies(retryCount + 1);
+        }
+        throw new Error(`API Error: ${response.status}`);
       }
 
       const data = await response.json();
-      console.log('API Response:', data);
       const formattedMovies = data.results.slice(0, MAX_MOVIES).map((item) => ({
         id: item.id,
         title: sanitizeText(item.title || item.name),
@@ -91,11 +100,21 @@ const TitleCards = ({ title, category = 'movie' }) => {
         type: category,
       }));
 
+      // Cache the data
+      localStorage.setItem(cacheKey.replace(/_\d+$/, ''), JSON.stringify({
+        data: formattedMovies,
+        timestamp: Date.now()
+      }));
+
       setMovies(formattedMovies);
       setData(cacheKey, formattedMovies);
     } catch (error) {
       console.error('Error fetching content:', error);
-      setError('Failed to load content. Please try again later.');
+      if (error.message.includes('503')) {
+        setError('TMDB service temporarily unavailable. Showing cached content if available.');
+      } else {
+        setError('Failed to load content. Please try again later.');
+      }
       setMovies([]);
     } finally {
       setLoading(false);
@@ -103,7 +122,12 @@ const TitleCards = ({ title, category = 'movie' }) => {
   };
 
   useEffect(() => {
-    fetchMovies();
+    // Debounce API calls
+    const timer = setTimeout(() => {
+      fetchMovies();
+    }, 500);
+    
+    return () => clearTimeout(timer);
   }, [title, category]);
 
   useEffect(() => {
