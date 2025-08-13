@@ -7,7 +7,6 @@ import Footer from '../../components/Footer/Footer';
 import SocialBar from '../../components/SocialBar/SocialBar';
 import Popunder from '../../components/Popunder/Popunder';
 import BannerAd from '../../components/BannerAd/BannerAd';
-import GoogleAdsense from '../../components/GoogleAdsense/GoogleAdsense';
 
 const Search = () => {
   const navigate = useNavigate();
@@ -319,7 +318,6 @@ const Search = () => {
             transition={{ duration: 0.6 }}
           >
             <h2 className="mb-8 text-2xl text-white font-semibold">Search Results for "{searchQuery}"</h2>
-            <GoogleAdsense />
             {loading ? (
               <div className="text-center py-12 text-white/70 text-lg">Searching movies...</div>
             ) : searchResults.length > 0 ? (
@@ -446,7 +444,6 @@ const Search = () => {
         </div>
       )}
 
-      <GoogleAdsense />
       <BannerAd position="footer" />
       {showPopunder && <Popunder />}
       <SocialBar />

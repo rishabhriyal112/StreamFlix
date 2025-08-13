@@ -5,7 +5,6 @@ import AdBanner from "../../components/AdBanner/AdBanner";
 import SocialBar from "../../components/SocialBar/SocialBar";
 import Popunder from "../../components/Popunder/Popunder";
 import BannerAd from "../../components/BannerAd/BannerAd";
-import GoogleAdsense from "../../components/GoogleAdsense/GoogleAdsense";
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
@@ -217,7 +216,6 @@ const Home = () => {
             <div className="space-y-12 md:space-y-16">
               <TitleCards title="Trending Movies" category="movie" />
               <BannerAd position="content" />
-              <GoogleAdsense />
               <TitleCards title="Popular TV Shows" category="tv" />
               <div className="text-center mt-12">
                 <button 
