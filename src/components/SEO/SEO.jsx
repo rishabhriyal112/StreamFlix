@@ -1,10 +1,10 @@
-import { Helmet } from 'react-helmet';
+import { Helmet } from 'react-helmet-async';
 
 const SEO = ({ 
   title = 'StreamFlix - Watch Movies & TV Shows Online',
   description = 'Stream unlimited movies and TV shows on StreamFlix. Discover trending content, create your watchlist, and enjoy HD streaming.',
   keywords = 'movies, tv shows, streaming, watch online, netflix clone, entertainment',
-  image = '/play.png',
+  image = 'https://streamflix.netlify.app/play.png',
   url = 'https://streamflix.netlify.app',
   type = 'website'
 }) => {
