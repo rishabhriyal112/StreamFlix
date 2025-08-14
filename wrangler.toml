@@ -1,5 +1,8 @@
 name = "streamflix"
 compatibility_date = "2025-08-14"
 
+[build]
+command = "npm run build"
+
 [assets]
 directory = "./dist"
