@@ -1,62 +1,47 @@
-import { Helmet } from 'react-helmet-async';
+import { useEffect } from 'react';
 
 const SEO = ({ 
   title = 'StreamFlix - Watch Movies & TV Shows Online',
   description = 'Stream unlimited movies and TV shows on StreamFlix. Discover trending content, create your watchlist, and enjoy HD streaming.',
   keywords = 'movies, tv shows, streaming, watch online, netflix clone, entertainment',
   image = 'https://streamflix.netlify.app/play.png',
-  url = 'https://streamflix.netlify.app',
-  type = 'website'
+  url = 'https://streamflix.netlify.app'
 }) => {
   const siteTitle = 'StreamFlix';
   const fullTitle = title.includes(siteTitle) ? title : `${title} | ${siteTitle}`;
 
-  return (
-    <Helmet>
-      {/* Basic Meta Tags */}
-      <title>{fullTitle}</title>
-      <meta name="description" content={description} />
-      <meta name="keywords" content={keywords} />
-      <meta name="author" content="StreamFlix" />
-      <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-      <meta name="robots" content="index, follow" />
-      <link rel="canonical" href={url} />
+  useEffect(() => {
+    // Update document title
+    document.title = fullTitle;
+    
+    // Update meta tags
+    const updateMeta = (name, content) => {
+      let meta = document.querySelector(`meta[name="${name}"]`) || document.querySelector(`meta[property="${name}"]`);
+      if (!meta) {
+        meta = document.createElement('meta');
+        if (name.startsWith('og:') || name.startsWith('twitter:')) {
+          meta.setAttribute('property', name);
+        } else {
+          meta.setAttribute('name', name);
+        }
+        document.head.appendChild(meta);
+      }
+      meta.setAttribute('content', content);
+    };
 
-      {/* Open Graph Tags */}
-      <meta property="og:title" content={fullTitle} />
-      <meta property="og:description" content={description} />
-      <meta property="og:image" content={image} />
-      <meta property="og:url" content={url} />
-      <meta property="og:type" content={type} />
-      <meta property="og:site_name" content={siteTitle} />
+    updateMeta('description', description);
+    updateMeta('keywords', keywords);
+    updateMeta('og:title', fullTitle);
+    updateMeta('og:description', description);
+    updateMeta('og:image', image);
+    updateMeta('og:url', url);
+    updateMeta('twitter:card', 'summary_large_image');
+    updateMeta('twitter:title', fullTitle);
+    updateMeta('twitter:description', description);
+    updateMeta('twitter:image', image);
+  }, [fullTitle, description, keywords, image, url]);
 
-      {/* Twitter Card Tags */}
-      <meta name="twitter:card" content="summary_large_image" />
-      <meta name="twitter:title" content={fullTitle} />
-      <meta name="twitter:description" content={description} />
-      <meta name="twitter:image" content={image} />
-
-      {/* Additional SEO Tags */}
-      <meta name="theme-color" content="#dc2626" />
-      <meta name="msapplication-TileColor" content="#dc2626" />
-      
-      {/* JSON-LD Structured Data */}
-      <script type="application/ld+json">
-        {JSON.stringify({
-          "@context": "https://schema.org",
-          "@type": "WebSite",
-          "name": siteTitle,
-          "description": description,
-          "url": url,
-          "potentialAction": {
-            "@type": "SearchAction",
-            "target": `${url}/search?q={search_term_string}`,
-            "query-input": "required name=search_term_string"
-          }
-        })}
-      </script>
-    </Helmet>
-  );
+  return null;
 };
 
 export default SEO;

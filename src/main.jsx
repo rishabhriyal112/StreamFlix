@@ -4,7 +4,6 @@ import "./index.css";
 import App from "./App.jsx";
 import { BrowserRouter } from "react-router-dom";
 import { DataProvider } from "./context/DataContext.jsx";
-import { HelmetProvider } from "react-helmet-async";
 
 const rootElement = document.getElementById("root");
 if (!rootElement) {
@@ -13,12 +12,10 @@ if (!rootElement) {
 
 createRoot(rootElement).render(
   <StrictMode>
-    <HelmetProvider>
-      <DataProvider>
-        <BrowserRouter>
-          <App />
-        </BrowserRouter>
-      </DataProvider>
-    </HelmetProvider>
+    <DataProvider>
+      <BrowserRouter>
+        <App />
+      </BrowserRouter>
+    </DataProvider>
   </StrictMode>
 );
