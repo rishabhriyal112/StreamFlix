@@ -1,7 +1,7 @@
-# SPA fallback
-/*    /index.html   200
-
-# Redirect common paths
+# Redirect common paths first
 /home    /    301
 /films   /movies    301
 /series  /tv-shows  301
+
+# SPA fallback (must be last)
+/*    /index.html   200
