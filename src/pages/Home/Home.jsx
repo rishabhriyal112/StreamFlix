@@ -1,7 +1,7 @@
 import Navbar from "../../components/Navbar/Navbar";
 import TitleCards from "../../components/TitleCards/TitleCards";
 import Footer from "../../components/Footer/Footer";
-
+import SEO from "../../components/SEO/SEO";
 import SocialBar from "../../components/SocialBar/SocialBar";
 
 
@@ -102,6 +102,11 @@ const Home = () => {
 
   return (
     <div className="bg-black min-h-screen flex flex-col">
+      <SEO 
+        title="StreamFlix - Watch Movies & TV Shows Online"
+        description="Stream unlimited movies and TV shows on StreamFlix. Discover trending content, create your watchlist, and enjoy HD streaming."
+        url="https://streamflix.netlify.app"
+      />
       <Navbar />
 
       {/* Hero Section */}
@@ -210,23 +215,28 @@ const Home = () => {
       </div>
 
       {/* Content Section */}
-      <main className="flex-1">
-        <div className="bg-gradient-to-t from-black via-black/95 to-black/80 pt-12 md:pt-16 lg:pt-20 pb-8">
+      <main className="flex-1" role="main">
+        <section className="bg-gradient-to-t from-black via-black/95 to-black/80 pt-12 md:pt-16 lg:pt-20 pb-8">
           <div className="container mx-auto px-4 md:px-6 lg:px-8">
             <div className="space-y-12 md:space-y-16">
-              <TitleCards title="Trending Movies" category="movie" />
-              <TitleCards title="Popular TV Shows" category="tv" />
+              <section aria-labelledby="trending-movies">
+                <TitleCards title="Trending Movies" category="movie" />
+              </section>
+              <section aria-labelledby="popular-tv">
+                <TitleCards title="Popular TV Shows" category="tv" />
+              </section>
               <div className="text-center mt-12">
                 <button 
                   onClick={() => navigate('/trending')}
                   className="bg-red-600 text-white px-8 py-3 rounded-lg hover:bg-red-700 transition-colors font-semibold"
+                  aria-label="View all trending movies and TV shows"
                 >
                   View All Trending Content
                 </button>
               </div>
             </div>
           </div>
-        </div>
+        </section>
       </main>
 
 

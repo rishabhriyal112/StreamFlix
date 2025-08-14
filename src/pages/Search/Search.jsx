@@ -5,6 +5,7 @@ import { Play } from 'lucide-react';
 import Navbar from '../../components/Navbar/Navbar';
 import Footer from '../../components/Footer/Footer';
 import SocialBar from '../../components/SocialBar/SocialBar';
+import SEO from '../../components/SEO/SEO';
 
 const Search = () => {
   const navigate = useNavigate();
@@ -262,6 +263,11 @@ const Search = () => {
 
   return (
     <div className="min-h-screen bg-black">
+      <SEO 
+        title="Search Movies & TV Shows - StreamFlix"
+        description="Search and discover movies and TV shows on StreamFlix. Find your favorite content with our powerful search engine."
+        url="https://streamflix.netlify.app/search"
+      />
       <Navbar />
       
       <div className="pt-20 md:pt-24 pb-12 px-4 md:px-6 lg:px-[6%]">

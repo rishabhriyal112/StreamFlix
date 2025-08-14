@@ -5,6 +5,7 @@ import { Play, Info, Star, Calendar, ChevronLeft, ChevronRight } from "lucide-re
 import Navbar from "../../components/Navbar/Navbar";
 import TitleCards from "../../components/TitleCards/TitleCards";
 import Footer from "../../components/Footer/Footer";
+import SEO from "../../components/SEO/SEO";
 
 
 import { secureFetch, getMovieDetailsEndpoint, getImageUrl, sanitizeForLog } from "../../utils/api";
@@ -97,6 +98,11 @@ const Movies = () => {
 
   return (
     <div className="bg-black min-h-screen">
+      <SEO 
+        title="Movies - StreamFlix"
+        description="Discover and stream the latest movies on StreamFlix. From blockbusters to indie films, find your next favorite movie."
+        url="https://streamflix.netlify.app/movies"
+      />
       <Navbar />
       
       {/* Hero Section */}

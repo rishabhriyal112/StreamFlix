@@ -1,0 +1,7 @@
+# SPA fallback
+/*    /index.html   200
+
+# Redirect common paths
+/home    /    301
+/films   /movies    301
+/series  /tv-shows  301
