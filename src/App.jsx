@@ -8,13 +8,12 @@ import Movie from "./pages/Movie/Movie";
 import Player from "./pages/Player/Player";
 import Watchlist from "./pages/Watchlist/Watchlist";
 import Trending from "./pages/Trending/Trending";
-import GoogleAnalytics from "./components/Analytics/GoogleAnalytics";
+
 import { Route, Routes } from "react-router-dom";
 
 const App = () => {
   return (
     <div>
-      <GoogleAnalytics />
       <Routes>
         <Route path="/" element={<Home />}></Route>
         <Route path="/movies" element={<Movies />}></Route>
