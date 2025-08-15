@@ -122,6 +122,12 @@ const TVShows = () => {
                 src={currentShow?.backdrop} 
                 alt={currentShow?.title} 
                 className="w-full h-full object-cover"
+                style={{ 
+                  width: '100%', 
+                  height: '100%',
+                  objectFit: 'cover',
+                  objectPosition: 'center top'
+                }}
                 onError={(e) => {
                   e.target.src = 'https://via.placeholder.com/1920x1080?text=No+Image';
                 }}
@@ -129,8 +135,8 @@ const TVShows = () => {
               <div className="absolute inset-0 bg-gradient-to-r from-black/70 via-black/30 to-transparent" />
             </div>
             
-            <div className="absolute bottom-16 left-6 md:bottom-20 md:left-8 z-20 max-w-2xl">
-              <h1 className="text-2xl md:text-3xl lg:text-4xl xl:text-5xl font-bold text-white mb-4 leading-tight">
+            <div className="absolute bottom-16 left-4 right-4 md:bottom-20 md:left-8 md:right-auto z-20 max-w-2xl">
+              <h1 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl xl:text-5xl font-bold text-white mb-3 md:mb-4 leading-tight">
                 {currentShow?.title}
               </h1>
               
@@ -156,24 +162,24 @@ const TVShows = () => {
                 {currentShow?.overview}
               </p>
               
-              <div className="flex gap-3 flex-wrap">
+              <div className="flex gap-2 sm:gap-3 flex-wrap">
                 <button 
-                  className="bg-red-600 text-white px-6 py-3 rounded-lg text-sm font-bold cursor-pointer hover:bg-red-700 transition-colors min-w-[120px] h-[40px] flex items-center justify-center gap-2"
+                  className="bg-red-600 text-white px-4 py-2 sm:px-6 sm:py-3 rounded-lg text-xs sm:text-sm font-bold cursor-pointer hover:bg-red-700 transition-colors min-w-[100px] sm:min-w-[120px] h-[36px] sm:h-[40px] flex items-center justify-center gap-1 sm:gap-2"
                   onClick={() => {
                     setTimeout(() => setSelectedShow(currentShow), 100);
                   }}
                 >
-                  <Play size={16} fill="currentColor" />
+                  <Play size={14} fill="currentColor" />
                   <span>Watch Now</span>
                 </button>
                 
                 <button 
-                  className="bg-white/20 text-white border border-white/30 px-6 py-3 rounded-lg text-sm font-medium cursor-pointer hover:bg-white/30 transition-colors backdrop-blur-sm min-w-[100px] h-[40px] flex items-center justify-center gap-2"
+                  className="bg-white/20 text-white border border-white/30 px-4 py-2 sm:px-6 sm:py-3 rounded-lg text-xs sm:text-sm font-medium cursor-pointer hover:bg-white/30 transition-colors backdrop-blur-sm min-w-[90px] sm:min-w-[100px] h-[36px] sm:h-[40px] flex items-center justify-center gap-1 sm:gap-2"
                   onClick={() => {
                     setTimeout(() => navigate(`/tv/${currentShow?.id}`), 100);
                   }}
                 >
-                  <Info size={16} />
+                  <Info size={14} />
                   <span>More Info</span>
                 </button>
               </div>

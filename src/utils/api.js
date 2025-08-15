@@ -10,11 +10,15 @@ if (!API_KEY) {
 export const secureFetch = async (url, options = {}) => {
   try {
     const defaultOptions = {
+      method: 'GET',
       headers: {
-        'Authorization': `Bearer ${API_KEY}`,
+        'Accept': 'application/json',
         'Content-Type': 'application/json',
+        'User-Agent': 'StreamFlix/1.0',
         ...options.headers
       },
+      mode: 'cors',
+      cache: 'default',
       ...options
     };
     

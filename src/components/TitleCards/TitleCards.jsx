@@ -5,6 +5,7 @@ import PropTypes from 'prop-types';
 import { addToWatchlist, removeFromWatchlist, isInWatchlist } from '../../utils/wishlist';
 import { useData } from '../../context/DataContext';
 import Popunder from '../Popunder/Popunder';
+import { getMobileOptimizedUrl, getMobileHeaders } from '../../utils/mobileDetection';
 
 
 // Constants
@@ -68,7 +69,12 @@ const TitleCards = ({ title, category = 'movie' }) => {
         await new Promise(resolve => setTimeout(resolve, Math.pow(2, retryCount) * 1000));
       }
       
-      const response = await fetch(url);
+      const optimizedUrl = getMobileOptimizedUrl(url);
+      const response = await fetch(optimizedUrl, {
+        method: 'GET',
+        headers: getMobileHeaders(),
+        mode: 'cors'
+      });
       
       if (!response.ok) {
         console.error('API Error:', response.status, response.statusText);
