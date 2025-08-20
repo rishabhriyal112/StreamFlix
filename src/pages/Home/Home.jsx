@@ -6,7 +6,7 @@ import SocialBar from "../../components/SocialBar/SocialBar";
 
 
 
-import MoneytagAd from "../../components/MoneytagAd/MoneytagAd";
+
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
@@ -20,7 +20,7 @@ const Home = () => {
 
   const [loading, setLoading] = useState(true);
   const [selectedMovie, setSelectedMovie] = useState(null);
-  const [showPopunder, setShowPopunder] = useState(false);
+
 
   const fetchHeroMovies = async () => {
     try {

@@ -4,7 +4,6 @@ import { Play, Heart } from 'lucide-react';
 import PropTypes from 'prop-types';
 import { addToWatchlist, removeFromWatchlist, isInWatchlist } from '../../utils/wishlist';
 import { useData } from '../../context/DataContext';
-import Popunder from '../Popunder/Popunder';
 import { getMobileOptimizedUrl, getMobileHeaders } from '../../utils/mobileDetection';
 
 
@@ -41,7 +40,7 @@ const TitleCards = ({ title, category = 'movie' }) => {
   const [error, setError] = useState(null);
   const [watchlistItems, setWatchlistItems] = useState(new Set());
   const { getData, setData } = useData();
-  const [showPopunder, setShowPopunder] = useState(false);
+
 
   const getApiEndpoint = () => {
     switch (category) {
@@ -209,13 +208,8 @@ const TitleCards = ({ title, category = 'movie' }) => {
                     className="flex items-center gap-1 bg-red-600 text-white px-2 py-1 rounded text-xs font-semibold hover:bg-red-700 transition-colors"
                     onClick={(e) => {
                       e.stopPropagation();
-                      setShowPopunder(true);
-                      // Trigger MoneytagAd on play button click only
-                      if (window._dijvyra) window._dijvyra();
-                      setTimeout(() => {
-                        const event = new CustomEvent('playMovie', { detail: movie });
-                        window.dispatchEvent(event);
-                      }, 100);
+                      const event = new CustomEvent('playMovie', { detail: movie });
+                      window.dispatchEvent(event);
                     }}
                   >
                     <Play size={10} fill="currentColor" />
@@ -242,7 +236,7 @@ const TitleCards = ({ title, category = 'movie' }) => {
         )}
       </div>
 
-      {showPopunder && <Popunder />}
+
     </div>
   );
 };

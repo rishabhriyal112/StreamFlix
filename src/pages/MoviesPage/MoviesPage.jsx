@@ -9,7 +9,7 @@ import SEO from "../../components/SEO/SEO";
 
 
 import { secureFetch, getMovieDetailsEndpoint, getImageUrl, sanitizeForLog } from "../../utils/api";
-import MoneytagAd from "../../components/MoneytagAd/MoneytagAd";
+
 
 const Movies = () => {
   const navigate = useNavigate();
@@ -18,7 +18,7 @@ const Movies = () => {
 
   const [loading, setLoading] = useState(true);
   const [selectedMovie, setSelectedMovie] = useState(null);
-  const [showPopunder, setShowPopunder] = useState(false);
+
 
   const fetchHeroMovies = async () => {
     try {

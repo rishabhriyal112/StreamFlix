@@ -8,7 +8,7 @@ import Footer from "../../components/Footer/Footer";
 
 
 import { secureFetch, getTVDetailsEndpoint, getImageUrl, sanitizeForLog } from "../../utils/api";
-import MoneytagAd from "../../components/MoneytagAd/MoneytagAd";
+
 
 const TVShows = () => {
   const navigate = useNavigate();
@@ -17,7 +17,7 @@ const TVShows = () => {
 
   const [loading, setLoading] = useState(true);
   const [selectedShow, setSelectedShow] = useState(null);
-  const [showPopunder, setShowPopunder] = useState(false);
+
 
   const fetchHeroShows = async () => {
     try {
