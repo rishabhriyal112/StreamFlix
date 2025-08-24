@@ -166,7 +166,7 @@ const Home = () => {
               
               <div className="flex gap-2 sm:gap-3 flex-wrap">
                 <button 
-                  className="bg-red-600 text-white px-4 py-2 sm:px-6 sm:py-3 rounded-lg text-xs sm:text-sm font-bold cursor-pointer hover:bg-red-700 transition-colors min-w-[100px] sm:min-w-[120px] h-[36px] sm:h-[40px] flex items-center justify-center gap-1 sm:gap-2"
+                  className="bg-red-600 text-white px-4 py-3 sm:px-6 sm:py-3 rounded-lg text-xs sm:text-sm font-bold cursor-pointer hover:bg-red-700 transition-colors min-w-[100px] sm:min-w-[120px] min-h-[48px] flex items-center justify-center gap-1 sm:gap-2"
                   onClick={() => {
                     setTimeout(() => setSelectedMovie(currentMovie), 100);
                   }}
@@ -176,7 +176,7 @@ const Home = () => {
                 </button>
                 
                 <button 
-                  className="bg-white/20 text-white border border-white/30 px-4 py-2 sm:px-6 sm:py-3 rounded-lg text-xs sm:text-sm font-medium cursor-pointer hover:bg-white/30 transition-colors backdrop-blur-sm min-w-[90px] sm:min-w-[100px] h-[36px] sm:h-[40px] flex items-center justify-center gap-1 sm:gap-2"
+                  className="bg-white/20 text-white border border-white/30 px-4 py-3 sm:px-6 sm:py-3 rounded-lg text-xs sm:text-sm font-medium cursor-pointer hover:bg-white/30 transition-colors backdrop-blur-sm min-w-[90px] sm:min-w-[100px] min-h-[48px] flex items-center justify-center gap-1 sm:gap-2"
                   onClick={() => {
                     setTimeout(() => navigate(`/tv/${currentMovie?.id}`), 100);
                   }}
