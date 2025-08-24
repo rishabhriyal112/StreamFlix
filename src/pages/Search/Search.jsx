@@ -4,7 +4,7 @@ import { motion } from 'framer-motion';
 import { Play } from 'lucide-react';
 import Navbar from '../../components/Navbar/Navbar';
 import Footer from '../../components/Footer/Footer';
-import SocialBar from '../../components/SocialBar/SocialBar';
+
 import SEO from '../../components/SEO/SEO';
 
 const Search = () => {
@@ -439,7 +439,7 @@ const Search = () => {
         </div>
       )}
 
-      <SocialBar />
+
       <Footer />
     </div>
   );

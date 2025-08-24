@@ -78,7 +78,7 @@ const Navbar = () => {
             <Link to="/" className="flex items-center gap-3 group">
               <img 
                 src="/play.png" 
-                alt="StreamFlix"
+                alt=""
                 className="w-6 h-6 lg:w-7 lg:h-7"
               />
               <span className="text-xl lg:text-2xl font-bold text-white group-hover:text-red-400 transition-colors">

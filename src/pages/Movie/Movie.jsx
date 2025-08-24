@@ -6,7 +6,7 @@ import Navbar from '../../components/Navbar/Navbar';
 import Footer from '../../components/Footer/Footer';
 import { addToWatchlist, removeFromWatchlist, isInWatchlist } from '../../utils/wishlist';
 
-import SocialBar from '../../components/SocialBar/SocialBar';
+
 
 const Movie = () => {
   const { id } = useParams();
@@ -228,7 +228,7 @@ const Movie = () => {
       )}
 
 
-      <SocialBar />
+
       <Footer />
     </div>
   );

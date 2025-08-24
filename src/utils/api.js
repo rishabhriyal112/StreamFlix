@@ -2,8 +2,9 @@
 const API_KEY = import.meta.env.VITE_TMDB_EXTERNAL_SERVICE_AUTH_TOKEN;
 const BASE_URL = 'https://api.themoviedb.org/3';
 
+// Remove the throw error that breaks the app
 if (!API_KEY) {
-  throw new Error('TMDB API key not found in environment variables');
+  console.warn('TMDB API key not found in environment variables');
 }
 
 // Secure fetch with error handling

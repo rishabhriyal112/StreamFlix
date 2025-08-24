@@ -6,7 +6,7 @@ import Navbar from '../../components/Navbar/Navbar';
 import Footer from '../../components/Footer/Footer';
 import { addToWatchlist, removeFromWatchlist, isInWatchlist } from '../../utils/wishlist';
 
-import SocialBar from '../../components/SocialBar/SocialBar';
+
 
 const TVShow = () => {
   const { id } = useParams();
@@ -308,7 +308,7 @@ const TVShow = () => {
       )}
 
 
-      <SocialBar />
+
       <Footer />
     </div>
   );

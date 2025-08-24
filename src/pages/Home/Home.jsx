@@ -2,7 +2,6 @@ import Navbar from "../../components/Navbar/Navbar";
 import TitleCards from "../../components/TitleCards/TitleCards";
 import Footer from "../../components/Footer/Footer";
 import SEO from "../../components/SEO/SEO";
-import SocialBar from "../../components/SocialBar/SocialBar";
 
 
 
@@ -11,7 +10,7 @@ import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import { Play, Info, Star, Calendar, ChevronLeft, ChevronRight } from "lucide-react";
-import { secureFetch, getImageUrl, sanitizeForLog } from "../../utils/api";
+import { secureFetch, getImageUrl } from "../../utils/api";
 
 const Home = () => {
   const navigate = useNavigate();
@@ -25,8 +24,9 @@ const Home = () => {
   const fetchHeroMovies = async () => {
     try {
       const apiToken = import.meta.env.VITE_TMDB_EXTERNAL_SERVICE_AUTH_TOKEN;
-      if (!apiToken || typeof apiToken !== 'string' || !/^[a-zA-Z0-9]+$/.test(apiToken)) {
-        throw new Error('Invalid API token format');
+      if (!apiToken) {
+        console.error('API token not found');
+        return;
       }
       
       const data = await secureFetch(`https://api.themoviedb.org/3/tv/popular?api_key=${apiToken}&page=1`);
@@ -52,7 +52,7 @@ const Home = () => {
               type: 'tv'
             };
           } catch (error) {
-            console.error(`Error fetching details for show ${sanitizeForLog(show.id)}:`, sanitizeForLog(error.message));
+            console.error('Error fetching show details:', error.message);
             return {
               id: show.id,
               title: show.name || 'Unknown Title',
@@ -70,7 +70,7 @@ const Home = () => {
       
       setHeroMovies(moviesWithDetails);
     } catch (error) {
-      console.error('Error fetching hero movies:', sanitizeForLog(error.message));
+      console.error('Error fetching hero movies:', error.message);
       setHeroMovies([]);
     } finally {
       setLoading(false);
@@ -275,7 +275,7 @@ const Home = () => {
 
 
 
-      <SocialBar />
+
       <Footer />
     </div>
   );
