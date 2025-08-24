@@ -91,10 +91,12 @@ const Home = () => {
   }, [heroMovies.length]);
 
   const nextSlide = () => {
+    if (heroMovies.length === 0) return;
     setCurrentSlide((prev) => (prev + 1) % heroMovies.length);
   };
 
   const prevSlide = () => {
+    if (heroMovies.length === 0) return;
     setCurrentSlide((prev) => (prev - 1 + heroMovies.length) % heroMovies.length);
   };
 

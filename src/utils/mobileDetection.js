@@ -1,5 +1,6 @@
 // Mobile detection and API optimization
 export const isMobile = () => {
+  if (typeof navigator === 'undefined') return false;
   return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
 };
 
@@ -16,7 +17,7 @@ export const getMobileHeaders = () => {
   return {
     'Accept': 'application/json',
     'Content-Type': 'application/json',
-    'User-Agent': isMobile() ? 'StreamFlix-Mobile/1.0' : 'StreamFlix/1.0',
+    'User-Agent': 'StreamFlix/1.0',
     'Cache-Control': 'no-cache'
   };
 };

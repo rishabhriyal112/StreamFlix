@@ -1,4 +1,4 @@
-const CACHE_NAME = 'streamflix-v' + Date.now();
+const CACHE_NAME = 'streamflix-v1.0.0';
 const urlsToCache = [
   '/',
   '/manifest.json',
@@ -8,7 +8,11 @@ const urlsToCache = [
 self.addEventListener('install', event => {
   event.waitUntil(
     caches.open(CACHE_NAME)
-      .then(cache => cache.addAll(urlsToCache))
+      .then(cache => {
+        return cache.addAll(urlsToCache).catch(() => {
+          // Cache failed silently
+        });
+      })
       .then(() => self.skipWaiting())
   );
 });
@@ -28,8 +32,24 @@ self.addEventListener('activate', event => {
 });
 
 self.addEventListener('fetch', event => {
+  // Only cache same-origin GET requests
+  if (event.request.method !== 'GET' || 
+      !event.request.url.startsWith(self.location.origin)) {
+    return;
+  }
+
   event.respondWith(
     caches.match(event.request)
-      .then(response => response || fetch(event.request))
+      .then(response => {
+        if (response) {
+          return response;
+        }
+        return fetch(event.request).catch(() => {
+          // Return offline fallback for navigation requests
+          if (event.request.mode === 'navigate') {
+            return caches.match('/');
+          }
+        });
+      })
   );
 });

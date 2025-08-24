@@ -81,6 +81,10 @@ const TitleCards = ({ title, category = 'movie' }) => {
       });
       
       if (!response.ok) {
+        throw new Error(`HTTP ${response.status}`);
+      }
+      
+      if (!response.ok) {
         console.error('API Error:', response.status, response.statusText);
         if (response.status === 503 && retryCount < 3) {
           console.log(`Retrying... attempt ${retryCount + 1}`);
@@ -217,8 +221,7 @@ const TitleCards = ({ title, category = 'movie' }) => {
                     className="flex items-center gap-1 bg-red-600 text-white px-2 py-1 rounded text-xs font-semibold hover:bg-red-700 transition-colors"
                     onClick={(e) => {
                       e.stopPropagation();
-                      const event = new CustomEvent('playMovie', { detail: movie });
-                      window.dispatchEvent(event);
+                      // Removed custom event dispatch for security
                     }}
                   >
                     <Play size={10} fill="currentColor" />
