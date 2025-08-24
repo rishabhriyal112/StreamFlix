@@ -16,14 +16,19 @@ if (!API_KEY) {
 }
 const MAX_MOVIES = 12;
 
-// Utility function to generate image URLs
+// Utility function to generate responsive image URLs
 const getImageUrl = (path, type = 'poster') => {
   if (!path) {
     return type === 'poster'
-      ? 'https://via.placeholder.com/500x750?text=No+Poster'
+      ? 'https://via.placeholder.com/154x231?text=No+Poster'
       : 'https://via.placeholder.com/780x440?text=No+Backdrop';
   }
-  return `https://image.tmdb.org/t/p/${type === 'poster' ? 'w500' : 'w780'}${path}`;
+  return `https://image.tmdb.org/t/p/${type === 'poster' ? 'w154' : 'w780'}${path}`;
+};
+
+const getImageSrcSet = (filename) => {
+  if (!filename || !filename.startsWith('/')) return '';
+  return `https://image.tmdb.org/t/p/w154${filename} 154w, https://image.tmdb.org/t/p/w342${filename} 342w, https://image.tmdb.org/t/p/w500${filename} 500w`;
 };
 
 // Utility function to sanitize and truncate text
@@ -189,8 +194,12 @@ const TitleCards = ({ title, category = 'movie' }) => {
               <img
                 className="w-full h-full object-cover"
                 src={movie.poster}
-                alt={`Poster for ${movie.title}`}
+                srcSet={getImageSrcSet(movie.poster.includes('tmdb.org') ? movie.poster.split('/').pop() : '')}
+                sizes="(max-width: 640px) 30vw, (max-width: 1024px) 20vw, 15vw"
+                alt={`${movie.title} poster`}
                 loading="lazy"
+                width="154"
+                height="231"
               />
 
               <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
