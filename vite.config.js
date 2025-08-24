@@ -6,10 +6,14 @@ export default defineConfig({
   plugins: [react(), tailwindcss()],
   build: {
     rollupOptions: {
-      input: {
-        main: './index.html',
-        sw: './public/sw.js'
+      output: {
+        manualChunks: {
+          vendor: ['react', 'react-dom', 'react-router-dom'],
+          motion: ['framer-motion'],
+          icons: ['lucide-react']
+        }
       }
-    }
+    },
+    chunkSizeWarningLimit: 1000
   }
 })
