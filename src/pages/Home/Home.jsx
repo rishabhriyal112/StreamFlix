@@ -209,18 +209,22 @@ const Home = () => {
         </div>
         
         {/* Slide Indicators */}
-        <div className="absolute bottom-6 md:bottom-8 left-1/2 transform -translate-x-1/2 flex gap-3 md:gap-4 z-30">
+        <div className="absolute bottom-6 md:bottom-8 left-1/2 transform -translate-x-1/2 flex gap-2 md:gap-3 z-30">
           {heroMovies.map((_, index) => (
             <button
               key={index}
-              className={`w-4 h-4 md:w-5 md:h-5 rounded-full cursor-pointer transition-all flex items-center justify-center ${
+              className={`w-12 h-12 rounded-full cursor-pointer transition-all flex items-center justify-center ${
                 index === currentSlide 
                   ? 'bg-red-600' 
                   : 'bg-white/40 hover:bg-white/60'
               }`}
               onClick={() => setCurrentSlide(index)}
               aria-label={`Go to slide ${index + 1}`}
-            />
+            >
+              <div className={`w-3 h-3 rounded-full ${
+                index === currentSlide ? 'bg-white' : 'bg-white/60'
+              }`} />
+            </button>
           ))}
         </div>
       </div>
