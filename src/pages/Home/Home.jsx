@@ -81,6 +81,17 @@ const Home = () => {
     fetchHeroMovies();
   }, []);
 
+  // Preload first hero image for LCP
+  useEffect(() => {
+    if (heroMovies.length > 0 && heroMovies[0]?.backdrop) {
+      const link = document.createElement('link');
+      link.rel = 'preload';
+      link.as = 'image';
+      link.href = heroMovies[0].backdrop;
+      document.head.appendChild(link);
+    }
+  }, [heroMovies]);
+
   useEffect(() => {
     if (heroMovies.length > 0) {
       const interval = setInterval(() => {
@@ -138,6 +149,8 @@ const Home = () => {
                   objectFit: 'cover',
                   objectPosition: 'center top'
                 }}
+                loading={currentSlide === 0 ? 'eager' : 'lazy'}
+                fetchPriority={currentSlide === 0 ? 'high' : 'low'}
                 onError={(e) => {
                   e.target.src = 'https://via.placeholder.com/1920x1080?text=No+Image';
                 }}
