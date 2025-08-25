@@ -263,10 +263,11 @@ const TVShows = () => {
         <div className="fixed inset-0 bg-black/90 flex items-center justify-center z-50" onClick={() => setSelectedShow(null)}>
           <div className="w-[90%] max-w-4xl h-[60vh] md:h-[450px] rounded-xl overflow-hidden" onClick={e => e.stopPropagation()}>
             <iframe
-              src={`https://vidsrc.cc/v2/embed/tv/${selectedShow.imdb.startsWith('tt') ? selectedShow.imdb : selectedShow.id}/1/1`}
+              src={`https://player.videasy.net/tv/${selectedShow.id}/1/1?color=DC2626&overlay=true&episodeSelector=true&nextEpisode=true&autoplayNextEpisode=true`}
               title={`${selectedShow.title} - S1E1`}
               frameBorder="0"
               allowFullScreen
+              allow="encrypted-media"
               className="w-full h-full"
             />
           </div>

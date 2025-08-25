@@ -297,10 +297,11 @@ const TVShow = () => {
         <div className="fixed inset-0 bg-black/90 flex items-center justify-center z-50" onClick={() => setSelectedShow(null)}>
           <div className="w-[90%] max-w-4xl h-[60vh] md:h-[450px] rounded-xl overflow-hidden" onClick={e => e.stopPropagation()}>
             <iframe
-              src={`https://vidsrc.cc/v2/embed/tv/${selectedShow.imdb.startsWith('tt') ? selectedShow.imdb : selectedShow.id}/${selectedShow.season}/${selectedShow.episode}`}
+              src={`https://player.videasy.net/tv/${selectedShow.id}/${selectedShow.season}/${selectedShow.episode}?color=DC2626&overlay=true&episodeSelector=true&nextEpisode=true&autoplayNextEpisode=true`}
               title={`${selectedShow.title} - S${selectedShow.season}E${selectedShow.episode}`}
               frameBorder="0"
               allowFullScreen
+              allow="encrypted-media"
               className="w-full h-full"
             />
           </div>
