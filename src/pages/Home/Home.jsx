@@ -9,7 +9,9 @@ import SEO from "../../components/SEO/SEO";
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
-import { Play, Info, Star, Calendar, ChevronLeft, ChevronRight } from "lucide-react";
+import { Play, Info, Star, Calendar, ChevronLeft, ChevronRight, Users, Video } from "lucide-react";
+import TrailerModal from "../../components/TrailerModal/TrailerModal";
+import CastModal from "../../components/CastModal/CastModal";
 import { secureFetch, getImageUrl } from "../../utils/api";
 
 const Home = () => {
@@ -19,6 +21,10 @@ const Home = () => {
 
   const [loading, setLoading] = useState(true);
   const [selectedMovie, setSelectedMovie] = useState(null);
+  const [showTrailer, setShowTrailer] = useState(false);
+  const [showCast, setShowCast] = useState(false);
+  const [trailerMovie, setTrailerMovie] = useState(null);
+  const [castMovie, setCastMovie] = useState(null);
 
 
   const fetchHeroMovies = async () => {
@@ -197,6 +203,28 @@ const Home = () => {
                   <Info size={14} />
                   <span>More Info</span>
                 </button>
+                
+                <button 
+                  className="bg-white/20 text-white border border-white/30 px-4 py-3 sm:px-6 sm:py-3 rounded-lg text-xs sm:text-sm font-medium cursor-pointer hover:bg-white/30 transition-colors backdrop-blur-sm min-w-[90px] sm:min-w-[100px] min-h-[48px] flex items-center justify-center gap-1 sm:gap-2"
+                  onClick={() => {
+                    setTrailerMovie(currentMovie);
+                    setShowTrailer(true);
+                  }}
+                >
+                  <Video size={14} />
+                  <span>Trailer</span>
+                </button>
+                
+                <button 
+                  className="bg-white/20 text-white border border-white/30 px-4 py-3 sm:px-6 sm:py-3 rounded-lg text-xs sm:text-sm font-medium cursor-pointer hover:bg-white/30 transition-colors backdrop-blur-sm min-w-[90px] sm:min-w-[100px] min-h-[48px] flex items-center justify-center gap-1 sm:gap-2"
+                  onClick={() => {
+                    setCastMovie(currentMovie);
+                    setShowCast(true);
+                  }}
+                >
+                  <Users size={14} />
+                  <span>Cast</span>
+                </button>
               </div>
             </div>
           </div>
@@ -284,6 +312,44 @@ const Home = () => {
           </div>
         </div>
       )}
+
+      <TrailerModal 
+        movie={trailerMovie}
+        isOpen={showTrailer}
+        onClose={() => {
+          setShowTrailer(false);
+          setTrailerMovie(null);
+        }}
+      />
+
+      <CastModal 
+        movie={castMovie}
+        isOpen={showCast}
+        onClose={() => {
+          setShowCast(false);
+          setCastMovie(null);
+        }}
+      />
+
+      {/* Trailer Modal */}
+      <TrailerModal 
+        movie={trailerMovie}
+        isOpen={showTrailer}
+        onClose={() => {
+          setShowTrailer(false);
+          setTrailerMovie(null);
+        }}
+      />
+
+      {/* Cast Modal */}
+      <CastModal 
+        movie={castMovie}
+        isOpen={showCast}
+        onClose={() => {
+          setShowCast(false);
+          setCastMovie(null);
+        }}
+      />
 
 
 

@@ -1,7 +1,9 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
-import { Play, Info, Star, Calendar, Tv, ChevronLeft, ChevronRight } from "lucide-react";
+import { Play, Info, Star, Calendar, Tv, ChevronLeft, ChevronRight, Users, Video } from "lucide-react";
+import TrailerModal from "../../components/TrailerModal/TrailerModal";
+import CastModal from "../../components/CastModal/CastModal";
 import Navbar from "../../components/Navbar/Navbar";
 import TitleCards from "../../components/TitleCards/TitleCards";
 import Footer from "../../components/Footer/Footer";
@@ -17,6 +19,10 @@ const TVShows = () => {
 
   const [loading, setLoading] = useState(true);
   const [selectedShow, setSelectedShow] = useState(null);
+  const [showTrailer, setShowTrailer] = useState(false);
+  const [showCast, setShowCast] = useState(false);
+  const [trailerShow, setTrailerShow] = useState(null);
+  const [castShow, setCastShow] = useState(null);
 
 
   const fetchHeroShows = async () => {
@@ -182,6 +188,28 @@ const TVShows = () => {
                   <Info size={14} />
                   <span>More Info</span>
                 </button>
+                
+                <button 
+                  className="bg-white/20 text-white border border-white/30 px-4 py-2 sm:px-6 sm:py-3 rounded-lg text-xs sm:text-sm font-medium cursor-pointer hover:bg-white/30 transition-colors backdrop-blur-sm min-w-[90px] sm:min-w-[100px] h-[36px] sm:h-[40px] flex items-center justify-center gap-1 sm:gap-2"
+                  onClick={() => {
+                    setTrailerShow(currentShow);
+                    setShowTrailer(true);
+                  }}
+                >
+                  <Video size={14} />
+                  <span>Trailer</span>
+                </button>
+                
+                <button 
+                  className="bg-white/20 text-white border border-white/30 px-4 py-2 sm:px-6 sm:py-3 rounded-lg text-xs sm:text-sm font-medium cursor-pointer hover:bg-white/30 transition-colors backdrop-blur-sm min-w-[90px] sm:min-w-[100px] h-[36px] sm:h-[40px] flex items-center justify-center gap-1 sm:gap-2"
+                  onClick={() => {
+                    setCastShow(currentShow);
+                    setShowCast(true);
+                  }}
+                >
+                  <Users size={14} />
+                  <span>Cast</span>
+                </button>
               </div>
             </div>
           </div>
@@ -222,7 +250,9 @@ const TVShows = () => {
       
       <div className="bg-gradient-to-t from-black via-black/95 to-black/80 pt-12 md:pt-16 lg:pt-20 pb-8">
         <div className="container mx-auto px-4 md:px-6 lg:px-8">
-          <TitleCards title="All TV Shows" category="tv" />
+          <TitleCards title="Popular TV Shows" category="tv" />
+          <TitleCards title="Top Rated TV Shows" category="tv" />
+          <TitleCards title="Trending TV Shows" category="tv" />
         </div>
       </div>
       
@@ -242,6 +272,24 @@ const TVShows = () => {
           </div>
         </div>
       )}
+
+      <TrailerModal 
+        movie={trailerShow}
+        isOpen={showTrailer}
+        onClose={() => {
+          setShowTrailer(false);
+          setTrailerShow(null);
+        }}
+      />
+
+      <CastModal 
+        movie={castShow}
+        isOpen={showCast}
+        onClose={() => {
+          setShowCast(false);
+          setCastShow(null);
+        }}
+      />
 
 
 
