@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { Play, Heart } from 'lucide-react';
 import PropTypes from 'prop-types';
 import { addToWatchlist, removeFromWatchlist, isInWatchlist } from '../../utils/wishlist';
-import { useData } from '../../context/DataContext';
+
 import { getMobileOptimizedUrl, getMobileHeaders } from '../../utils/mobileDetection';
 
 
@@ -44,7 +44,7 @@ const TitleCards = ({ title, category = 'movie' }) => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [watchlistItems, setWatchlistItems] = useState(new Set());
-  const { getData, setData } = useData();
+
 
 
   const getApiEndpoint = () => {
@@ -109,7 +109,6 @@ const TitleCards = ({ title, category = 'movie' }) => {
       // No localStorage caching to prevent storage issues
 
       setMovies(formattedMovies);
-      setData(baseCacheKey, formattedMovies);
     } catch (error) {
       console.error('Error fetching content:', error);
       if (error.message.includes('503')) {
