@@ -1,11 +1,13 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
-import { Play, Info, Star, Calendar, ChevronLeft, ChevronRight } from "lucide-react";
+import { Play, Info, Star, Calendar, ChevronLeft, ChevronRight, Users, Video } from "lucide-react";
 import Navbar from "../../components/Navbar/Navbar";
 import TitleCards from "../../components/TitleCards/TitleCards";
 import Footer from "../../components/Footer/Footer";
 import SEO from "../../components/SEO/SEO";
+import TrailerModal from "../../components/TrailerModal/TrailerModal";
+import CastModal from "../../components/CastModal/CastModal";
 
 
 import { secureFetch, getMovieDetailsEndpoint, getImageUrl, sanitizeForLog } from "../../utils/api";
@@ -18,6 +20,10 @@ const Movies = () => {
 
   const [loading, setLoading] = useState(true);
   const [selectedMovie, setSelectedMovie] = useState(null);
+  const [showTrailer, setShowTrailer] = useState(false);
+  const [showCast, setShowCast] = useState(false);
+  const [trailerMovie, setTrailerMovie] = useState(null);
+  const [castMovie, setCastMovie] = useState(null);
 
 
   const fetchHeroMovies = async () => {
@@ -182,6 +188,28 @@ const Movies = () => {
                   <Info size={14} />
                   <span>More Info</span>
                 </button>
+                
+                <button 
+                  className="bg-white/20 text-white border border-white/30 px-4 py-2 sm:px-6 sm:py-3 rounded-lg text-xs sm:text-sm font-medium cursor-pointer hover:bg-white/30 transition-colors backdrop-blur-sm min-w-[90px] sm:min-w-[100px] h-[36px] sm:h-[40px] flex items-center justify-center gap-1 sm:gap-2"
+                  onClick={() => {
+                    setTrailerMovie(currentMovie);
+                    setShowTrailer(true);
+                  }}
+                >
+                  <Video size={14} />
+                  <span>Trailer</span>
+                </button>
+                
+                <button 
+                  className="bg-white/20 text-white border border-white/30 px-4 py-2 sm:px-6 sm:py-3 rounded-lg text-xs sm:text-sm font-medium cursor-pointer hover:bg-white/30 transition-colors backdrop-blur-sm min-w-[90px] sm:min-w-[100px] h-[36px] sm:h-[40px] flex items-center justify-center gap-1 sm:gap-2"
+                  onClick={() => {
+                    setCastMovie(currentMovie);
+                    setShowCast(true);
+                  }}
+                >
+                  <Users size={14} />
+                  <span>Cast</span>
+                </button>
               </div>
             </div>
           </div>
@@ -222,7 +250,9 @@ const Movies = () => {
       
       <div className="bg-gradient-to-t from-black via-black/95 to-black/80 pt-12 md:pt-16 lg:pt-20 pb-8">
         <div className="container mx-auto px-4 md:px-6 lg:px-8">
-          <TitleCards title="All Movies" category="movie" />
+          <TitleCards title="Popular Movies" category="movie" />
+          <TitleCards title="Top Rated Movies" category="movie" />
+          <TitleCards title="Trending Movies" category="movie" />
         </div>
       </div>
       
@@ -242,6 +272,26 @@ const Movies = () => {
           </div>
         </div>
       )}
+
+      {/* Trailer Modal */}
+      <TrailerModal 
+        movie={trailerMovie}
+        isOpen={showTrailer}
+        onClose={() => {
+          setShowTrailer(false);
+          setTrailerMovie(null);
+        }}
+      />
+
+      {/* Cast Modal */}
+      <CastModal 
+        movie={castMovie}
+        isOpen={showCast}
+        onClose={() => {
+          setShowCast(false);
+          setCastMovie(null);
+        }}
+      />
 
 
 
