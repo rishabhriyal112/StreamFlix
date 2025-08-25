@@ -23,12 +23,12 @@ const getImageUrl = (path, type = 'poster') => {
       ? 'https://via.placeholder.com/154x231?text=No+Poster'
       : 'https://via.placeholder.com/780x440?text=No+Backdrop';
   }
-  return `https://image.tmdb.org/t/p/${type === 'poster' ? 'w342' : 'w780'}${path}`;
+  return `https://image.tmdb.org/t/p/${type === 'poster' ? 'w500' : 'w1280'}${path}`;
 };
 
 const getImageSrcSet = (filename) => {
   if (!filename || !filename.startsWith('/')) return '';
-  return `https://image.tmdb.org/t/p/w185${filename} 185w, https://image.tmdb.org/t/p/w342${filename} 342w`;
+  return `https://image.tmdb.org/t/p/w342${filename} 342w, https://image.tmdb.org/t/p/w500${filename} 500w`;
 };
 
 // Utility function to sanitize and truncate text

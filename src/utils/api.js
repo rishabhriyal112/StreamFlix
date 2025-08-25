@@ -50,7 +50,7 @@ export const getImageUrl = (path, type = 'poster') => {
       ? 'https://via.placeholder.com/500x750?text=No+Poster'
       : 'https://via.placeholder.com/780x440?text=No+Backdrop';
   }
-  return `https://image.tmdb.org/t/p/${type === 'poster' ? 'w500' : 'w780'}${path}`;
+  return `https://image.tmdb.org/t/p/${type === 'poster' ? 'w500' : 'w1280'}${path}`;
 };
 
 // Sanitize text for logging
