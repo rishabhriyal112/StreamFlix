@@ -14,8 +14,6 @@ const Home = () => {
   const [currentSlide, setCurrentSlide] = useState(0);
 
   const [loading, setLoading] = useState(true);
-  const [selectedMovie, setSelectedMovie] = useState(null);
-  const [showPopunder, setShowPopunder] = useState(false);
 
   const fetchHeroMovies = async () => {
     try {
@@ -72,10 +70,10 @@ const Home = () => {
       <Navbar />
 
       {/* Hero Section */}
-      <div className="relative h-screen flex items-center overflow-hidden">
+      <div className="relative w-full h-[60vh] sm:h-[70vh] md:h-[80vh] lg:h-screen flex items-center overflow-hidden">
         {loading ? (
           <motion.div 
-            className="h-screen flex items-center justify-center bg-black w-full"
+            className="absolute inset-0 flex items-center justify-center bg-black w-full"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
           >
@@ -87,59 +85,65 @@ const Home = () => {
           </motion.div>
         ) : (
           <div className="relative w-full h-full">
-            <div className="absolute top-0 left-0 w-full h-full overflow-hidden">
+            <div className="absolute inset-0 overflow-hidden">
               <img 
                 src={currentMovie?.backdrop} 
                 alt={currentMovie?.title} 
-                className="w-full h-full object-cover"
+                className="w-full h-full object-cover sm:object-cover"
                 onError={(e) => {
                   e.target.src = 'https://via.placeholder.com/1920x1080?text=No+Image';
                 }}
               />
-              <div className="absolute inset-0 bg-gradient-to-r from-black/70 via-black/30 to-transparent" />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-black/20 sm:bg-gradient-to-r sm:from-black/70 sm:via-black/30 sm:to-transparent" />
             </div>
             
-            <div className="absolute bottom-16 left-6 md:bottom-20 md:left-8 z-20 max-w-2xl">
-              <h1 className="text-2xl md:text-3xl lg:text-4xl xl:text-5xl font-bold text-white mb-4 leading-tight">
+            <div className="absolute bottom-4 sm:bottom-8 md:bottom-12 lg:bottom-16 left-3 right-3 sm:left-6 sm:right-auto md:left-8 lg:left-12 z-20 sm:max-w-md md:max-w-lg lg:max-w-2xl">
+              <h1 className="text-lg sm:text-2xl md:text-3xl lg:text-4xl xl:text-5xl font-bold text-white mb-2 sm:mb-4 md:mb-6 leading-tight text-center sm:text-left">
                 {currentMovie?.title}
               </h1>
               
-              <div className="flex items-center gap-4 mb-4">
-                <div className="flex items-center gap-1 text-white font-medium">
-                  <Star size={16} fill="currentColor" className="text-yellow-400" />
-                  <span className="text-sm">{currentMovie?.rating?.toFixed(1)}</span>
+              <div className="hidden sm:block mb-3 md:mb-4">
+                <p className="text-gray-300 text-sm md:text-base line-clamp-2 md:line-clamp-3">
+                  {currentMovie?.overview}
+                </p>
+              </div>
+              
+              <div className="flex items-center justify-center sm:justify-start gap-2 sm:gap-4 md:gap-6 mb-3 sm:mb-5 md:mb-6 flex-wrap">
+                <div className="flex items-center gap-1 text-white font-medium bg-black/30 px-2 py-1 rounded-full backdrop-blur-sm">
+                  <Star size={12} sm:size={16} md:size={18} fill="currentColor" className="text-yellow-400" />
+                  <span className="text-xs sm:text-base md:text-lg font-semibold">{currentMovie?.rating?.toFixed(1)}</span>
                 </div>
-                <div className="flex items-center gap-1 text-white font-medium">
-                  <Calendar size={16} />
-                  <span className="text-sm">{currentMovie?.year}</span>
+                <div className="flex items-center gap-1 text-white font-medium bg-black/30 px-2 py-1 rounded-full backdrop-blur-sm">
+                  <Calendar size={12} sm:size={16} md:size={18} />
+                  <span className="text-xs sm:text-base md:text-lg">{currentMovie?.year}</span>
                 </div>
-                <div className="bg-red-600 text-white px-3 py-1 rounded-full text-xs font-bold flex items-center justify-center">
+                <div className="bg-red-600 text-white px-2 sm:px-3 md:px-4 py-1 rounded-full text-xs sm:text-sm md:text-base font-bold">
                   HD
                 </div>
               </div>
               
-              <div className="flex gap-3 flex-wrap">
+              <div className="flex flex-col sm:flex-row gap-2 sm:gap-4">
                 <button 
-                  className="bg-red-600 text-white px-6 py-3 rounded-lg text-sm font-bold cursor-pointer hover:bg-red-700 transition-colors min-w-[120px] h-[40px] flex items-center justify-center gap-2"
+                  className="bg-red-600 text-white px-3 py-2 sm:px-8 sm:py-4 md:px-10 md:py-4 rounded-md sm:rounded-xl text-xs sm:text-base md:text-lg font-bold cursor-pointer hover:bg-red-700 transition-all transform hover:scale-105 flex items-center justify-center gap-1 sm:gap-3 shadow-lg w-full sm:w-auto"
                   onClick={() => {
                     if (currentMovie?.id) {
                       navigate(`/tv/${currentMovie.id}`);
                     }
                   }}
                 >
-                  <Play size={16} fill="currentColor" />
+                  <Play size={12} className="sm:w-5 sm:h-5 md:w-6 md:h-6" fill="currentColor" />
                   <span>Watch Now</span>
                 </button>
                 
                 <button 
-                  className="bg-white/20 text-white border border-white/30 px-6 py-3 rounded-lg text-sm font-medium cursor-pointer hover:bg-white/30 transition-colors backdrop-blur-sm min-w-[100px] h-[40px] flex items-center justify-center gap-2"
+                  className="bg-white/20 text-white border border-white/30 px-3 py-2 sm:px-8 sm:py-4 md:px-10 md:py-4 rounded-md sm:rounded-xl text-xs sm:text-base md:text-lg font-medium cursor-pointer hover:bg-white/30 transition-all transform hover:scale-105 backdrop-blur-sm flex items-center justify-center gap-1 sm:gap-3 shadow-lg w-full sm:w-auto"
                   onClick={() => {
                     if (currentMovie?.id) {
                       navigate(`/tv/${currentMovie.id}`);
                     }
                   }}
                 >
-                  <Info size={16} />
+                  <Info size={12} className="sm:w-5 sm:h-5 md:w-6 md:h-6" />
                   <span>More Info</span>
                 </button>
               </div>
@@ -148,31 +152,31 @@ const Home = () => {
         )}
         
         {/* Navigation Arrows */}
-        <div className="absolute top-1/2 transform -translate-y-1/2 w-full flex justify-between px-4 md:px-8 z-30">
+        <div className="absolute top-1/2 transform -translate-y-1/2 w-full flex justify-between px-3 sm:px-4 md:px-8 z-30">
           <button 
-            className="w-10 h-10 md:w-12 md:h-12 bg-black/60 rounded-full text-white cursor-pointer flex items-center justify-center hover:bg-black/80 transition-colors"
+            className="w-10 h-10 sm:w-12 sm:h-12 md:w-14 md:h-14 bg-black/70 rounded-full text-white cursor-pointer flex items-center justify-center hover:bg-black/90 transition-all transform hover:scale-110 shadow-lg backdrop-blur-sm"
             onClick={prevSlide}
           >
-            <ChevronLeft size={20} />
+            <ChevronLeft size={18} className="sm:w-6 sm:h-6 md:w-7 md:h-7" />
           </button>
           
           <button 
-            className="w-10 h-10 md:w-12 md:h-12 bg-black/60 rounded-full text-white cursor-pointer flex items-center justify-center hover:bg-black/80 transition-colors"
+            className="w-10 h-10 sm:w-12 sm:h-12 md:w-14 md:h-14 bg-black/70 rounded-full text-white cursor-pointer flex items-center justify-center hover:bg-black/90 transition-all transform hover:scale-110 shadow-lg backdrop-blur-sm"
             onClick={nextSlide}
           >
-            <ChevronRight size={20} />
+            <ChevronRight size={18} className="sm:w-6 sm:h-6 md:w-7 md:h-7" />
           </button>
         </div>
         
         {/* Slide Indicators */}
-        <div className="absolute bottom-6 md:bottom-8 left-1/2 transform -translate-x-1/2 flex gap-2 md:gap-3 z-30">
+        <div className="hidden sm:flex absolute bottom-1 sm:bottom-3 md:bottom-4 left-1/2 transform -translate-x-1/2 gap-2 sm:gap-3 md:gap-4 z-30 bg-black/30 px-3 py-2 rounded-full backdrop-blur-sm">
           {heroMovies.map((_, index) => (
             <button
               key={index}
-              className={`w-2 h-2 md:w-3 md:h-3 rounded-full cursor-pointer transition-all ${
+              className={`w-2 h-2 sm:w-2.5 sm:h-2.5 md:w-3 md:h-3 rounded-full cursor-pointer transition-all transform hover:scale-125 ${
                 index === currentSlide 
-                  ? 'bg-red-600' 
-                  : 'bg-white/40 hover:bg-white/60'
+                  ? 'bg-red-600 shadow-lg' 
+                  : 'bg-white/50 hover:bg-white/80'
               }`}
               onClick={() => setCurrentSlide(index)}
             />
@@ -191,19 +195,10 @@ const Home = () => {
               <section aria-labelledby="popular-tv">
                 <TitleCards title="Popular TV Shows" category="tv" />
               </section>
-
             </div>
           </div>
         </section>
       </main>
-
-
-
-      {/* Footer */}
-
-
-
-
 
       <Footer />
     </div>
