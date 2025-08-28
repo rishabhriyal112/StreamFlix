@@ -1,31 +1,55 @@
-// Service Worker for API caching
-const CACHE_NAME = 'streamflix-api-v1';
-const API_CACHE_DURATION = 6 * 60 * 60 * 1000; // 6 hours
+const CACHE_NAME = 'streamflix-v1.0.0';
+const urlsToCache = [
+  '/',
+  '/manifest.json',
+  '/play.png'
+];
 
-self.addEventListener('fetch', event => {
-  if (event.request.url.includes('api.themoviedb.org')) {
-    event.respondWith(handleApiRequest(event.request));
-  }
+self.addEventListener('install', event => {
+  event.waitUntil(
+    caches.open(CACHE_NAME)
+      .then(cache => {
+        return cache.addAll(urlsToCache).catch(() => {
+          // Cache failed silently
+        });
+      })
+      .then(() => self.skipWaiting())
+  );
 });
 
-async function handleApiRequest(request) {
-  const cache = await caches.open(CACHE_NAME);
-  const cached = await cache.match(request);
-  
-  if (cached) {
-    const cacheTime = cached.headers.get('sw-cache-time');
-    if (cacheTime && Date.now() - parseInt(cacheTime) < API_CACHE_DURATION) {
-      return cached;
-    }
+self.addEventListener('activate', event => {
+  event.waitUntil(
+    caches.keys().then(cacheNames => {
+      return Promise.all(
+        cacheNames.map(cacheName => {
+          if (cacheName !== CACHE_NAME) {
+            return caches.delete(cacheName);
+          }
+        })
+      );
+    }).then(() => self.clients.claim())
+  );
+});
+
+self.addEventListener('fetch', event => {
+  // Only cache same-origin GET requests
+  if (event.request.method !== 'GET' || 
+      !event.request.url.startsWith(self.location.origin)) {
+    return;
   }
-  
-  try {
-    const response = await fetch(request);
-    const responseClone = response.clone();
-    responseClone.headers.set('sw-cache-time', Date.now().toString());
-    cache.put(request, responseClone);
-    return response;
-  } catch (error) {
-    return cached || new Response('Network error', { status: 503 });
-  }
-}
+
+  event.respondWith(
+    caches.match(event.request)
+      .then(response => {
+        if (response) {
+          return response;
+        }
+        return fetch(event.request).catch(() => {
+          // Return offline fallback for navigation requests
+          if (event.request.mode === 'navigate') {
+            return caches.match('/');
+          }
+        });
+      })
+  );
+});

@@ -76,7 +76,7 @@ const Navbar = () => {
             <Link to="/" className="flex items-center gap-3 group">
               <img 
                 src="/play.png" 
-                alt="StreamFlix"
+                alt=""
                 className="w-6 h-6 lg:w-7 lg:h-7"
               />
               <span className="text-xl lg:text-2xl font-bold text-white group-hover:text-red-400 transition-colors">
@@ -110,7 +110,8 @@ const Navbar = () => {
               {/* Search */}
               <Link 
                 to="/search"
-                className="text-white hover:text-red-400 transition-colors p-2 rounded-full hover:bg-white/10"
+                className="text-white hover:text-red-400 transition-colors p-2 rounded-full hover:bg-white/10 min-w-[44px] min-h-[44px] flex items-center justify-center"
+                aria-label="Search movies and TV shows"
               >
                 <Search size={20} />
               </Link>
@@ -118,7 +119,8 @@ const Navbar = () => {
               {/* Wishlist */}
               <Link 
                 to="/watchlist"
-                className="text-white hover:text-red-400 transition-colors p-2 rounded-full hover:bg-white/10 relative"
+                className="text-white hover:text-red-400 transition-colors p-2 rounded-full hover:bg-white/10 relative min-w-[44px] min-h-[44px] flex items-center justify-center"
+                aria-label={`My watchlist (${wishlistCount} items)`}
               >
                 <Heart size={20} />
                 {wishlistCount > 0 && (
@@ -130,8 +132,9 @@ const Navbar = () => {
 
               {/* Mobile Menu Toggle */}
               <button 
-                className="lg:hidden text-white hover:text-red-400 transition-colors p-2"
+                className="lg:hidden text-white hover:text-red-400 transition-colors p-2 min-w-[44px] min-h-[44px] flex items-center justify-center"
                 onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+                aria-label={isMobileMenuOpen ? "Close navigation menu" : "Open navigation menu"}
               >
                 <AnimatePresence mode="wait">
                   {isMobileMenuOpen ? (
