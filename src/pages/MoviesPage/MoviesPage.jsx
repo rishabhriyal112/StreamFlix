@@ -11,11 +11,12 @@ const MoviesPage = () => {
   const [movies, setMovies] = useState([]);
   const [loading, setLoading] = useState(true);
   const [page, setPage] = useState(1);
+  const [category, setCategory] = useState('popular');
 
   useEffect(() => {
     const loadMovies = async () => {
       try {
-        const data = await fetchMovies('popular', page);
+        const data = await fetchMovies(category, page);
         const movieList = data.results?.map(movie => ({
           id: movie.id,
           title: movie.title,
@@ -38,7 +39,14 @@ const MoviesPage = () => {
       }
     };
     loadMovies();
-  }, [page]);
+  }, [page, category]);
+
+  const handleCategoryChange = (newCategory) => {
+    setCategory(newCategory);
+    setPage(1);
+    setMovies([]);
+    setLoading(true);
+  };
 
   const handleWishlist = (movie, e) => {
     e.stopPropagation();
@@ -52,14 +60,31 @@ const MoviesPage = () => {
   return (
     <div className="bg-black min-h-screen">
       <Navbar />
-      <div className="pt-20 px-4">
-        <h1 className="text-3xl text-white font-bold mb-8">Popular Movies</h1>
+      <div className="pt-20 px-4 md:px-8">
+        <div className="mb-8">
+          <h1 className="text-4xl md:text-5xl text-white font-bold mb-6 text-center">Movies</h1>
+          <div className="flex justify-center gap-2 md:gap-4 mb-6">
+            {['popular', 'top_rated', 'upcoming'].map((cat) => (
+              <button
+                key={cat}
+                onClick={() => handleCategoryChange(cat)}
+                className={`px-4 py-2 rounded-full text-sm font-medium transition-all ${
+                  category === cat
+                    ? 'bg-red-600 text-white'
+                    : 'bg-gray-800 text-gray-300 hover:bg-gray-700'
+                }`}
+              >
+                {cat === 'top_rated' ? 'Top Rated' : cat.charAt(0).toUpperCase() + cat.slice(1)}
+              </button>
+            ))}
+          </div>
+        </div>
         
         {loading && page === 1 ? (
           <div className="text-white text-center py-8">Loading movies...</div>
         ) : (
           <>
-            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4">
+            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4 md:gap-6">
               {movies.map(movie => (
                 <div
                   key={movie.id}

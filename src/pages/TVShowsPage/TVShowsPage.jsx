@@ -11,11 +11,12 @@ const TVShowsPage = () => {
   const [shows, setShows] = useState([]);
   const [loading, setLoading] = useState(true);
   const [page, setPage] = useState(1);
+  const [category, setCategory] = useState('popular');
 
   useEffect(() => {
     const loadShows = async () => {
       try {
-        const data = await fetchTVShows('popular', page);
+        const data = await fetchTVShows(category, page);
         const showList = data.results?.map(show => ({
           id: show.id,
           title: show.name,
@@ -38,7 +39,14 @@ const TVShowsPage = () => {
       }
     };
     loadShows();
-  }, [page]);
+  }, [page, category]);
+
+  const handleCategoryChange = (newCategory) => {
+    setCategory(newCategory);
+    setPage(1);
+    setShows([]);
+    setLoading(true);
+  };
 
   const handleWishlist = (show, e) => {
     e.stopPropagation();
@@ -52,14 +60,31 @@ const TVShowsPage = () => {
   return (
     <div className="bg-black min-h-screen">
       <Navbar />
-      <div className="pt-20 px-4">
-        <h1 className="text-3xl text-white font-bold mb-8">Popular TV Shows</h1>
+      <div className="pt-20 px-4 md:px-8">
+        <div className="mb-8">
+          <h1 className="text-4xl md:text-5xl text-white font-bold mb-6 text-center">TV Shows</h1>
+          <div className="flex justify-center gap-2 md:gap-4 mb-6">
+            {['popular', 'top_rated', 'on_the_air'].map((cat) => (
+              <button
+                key={cat}
+                onClick={() => handleCategoryChange(cat)}
+                className={`px-4 py-2 rounded-full text-sm font-medium transition-all ${
+                  category === cat
+                    ? 'bg-red-600 text-white'
+                    : 'bg-gray-800 text-gray-300 hover:bg-gray-700'
+                }`}
+              >
+                {cat === 'top_rated' ? 'Top Rated' : cat === 'on_the_air' ? 'On Air' : cat.charAt(0).toUpperCase() + cat.slice(1)}
+              </button>
+            ))}
+          </div>
+        </div>
         
         {loading && page === 1 ? (
           <div className="text-white text-center py-8">Loading TV shows...</div>
         ) : (
           <>
-            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4">
+            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4 md:gap-6">
               {shows.map(show => (
                 <div
                   key={show.id}

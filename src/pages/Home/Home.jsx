@@ -1,7 +1,6 @@
 import Navbar from "../../components/Navbar/Navbar";
 import TitleCards from "../../components/TitleCards/TitleCards";
 import Footer from "../../components/Footer/Footer";
-import SEO from "../../components/SEO/SEO";
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
@@ -62,11 +61,6 @@ const Home = () => {
 
   return (
     <div className="bg-black min-h-screen flex flex-col">
-      <SEO 
-        title="StreamFlix - Watch Movies & TV Shows Online"
-        description="Stream unlimited movies and TV shows on StreamFlix. Discover trending content, create your watchlist, and enjoy HD streaming."
-        url="https://streamflix.netlify.app"
-      />
       <Navbar />
 
       {/* Hero Section */}
