@@ -41,6 +41,7 @@ const Navbar = () => {
     { name: "Home", href: "/" },
     { name: "Movies", href: "/movies" },
     { name: "Series", href: "/tv-shows" },
+    { name: "Anime", href: "/anime" },
     { name: "Trending", href: "/trending" },
     { name: "My List", href: "/watchlist" }
   ];
@@ -61,15 +62,12 @@ const Navbar = () => {
       </AnimatePresence>
 
       {/* Main Header */}
-      <motion.header 
+      <header 
         className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${
           isScrolled 
             ? 'bg-black/95 backdrop-blur-md shadow-lg' 
             : 'bg-gradient-to-b from-black/80 via-black/40 to-transparent'
         }`}
-        initial={{ y: -100, opacity: 0 }}
-        animate={{ y: 0, opacity: 1 }}
-        transition={{ duration: 0.8 }}
       >
         <div className="w-full px-6">
           <div className="flex items-center justify-between h-16 lg:h-20">
@@ -199,7 +197,7 @@ const Navbar = () => {
             </motion.div>
           )}
         </AnimatePresence>
-      </motion.header>
+      </header>
     </>
   );
 };

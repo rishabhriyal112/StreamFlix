@@ -1,164 +1,137 @@
 import { useState, useEffect } from 'react';
-import { motion } from 'framer-motion';
-import { TrendingUp, Calendar, Star } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
+import { Play, Heart } from 'lucide-react';
 import Navbar from '../../components/Navbar/Navbar';
 import Footer from '../../components/Footer/Footer';
-import { secureFetch, getImageUrl, sanitizeForLog } from '../../utils/api';
+import { fetchMovies, fetchTVShows, getImageUrl } from '../../utils/api';
+import { addToWatchlist, removeFromWatchlist, isInWatchlist } from '../../utils/wishlist';
 
 const Trending = () => {
-  const [trendingMovies, setTrendingMovies] = useState([]);
-  const [trendingTV, setTrendingTV] = useState([]);
-  const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
+  const [content, setContent] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [activeTab, setActiveTab] = useState('all');
 
   useEffect(() => {
-    const fetchTrending = async () => {
+    const loadTrending = async () => {
       try {
-        const apiToken = import.meta.env.VITE_TMDB_EXTERNAL_SERVICE_AUTH_TOKEN;
-        if (!apiToken || typeof apiToken !== 'string' || !/^[a-zA-Z0-9]+$/.test(apiToken)) {
-          throw new Error('Invalid API token format');
-        }
-        
         const [moviesData, tvData] = await Promise.all([
-          secureFetch(`https://api.themoviedb.org/3/trending/movie/week?api_key=${apiToken}`),
-          secureFetch(`https://api.themoviedb.org/3/trending/tv/week?api_key=${apiToken}`)
+          fetchMovies('popular'),
+          fetchTVShows('popular')
         ]);
 
-        if (!moviesData?.results || !tvData?.results) {
-          throw new Error('Invalid API response structure');
-        }
+        const movies = moviesData.results?.slice(0, 10).map(item => ({
+          id: item.id,
+          title: item.title,
+          poster: getImageUrl(item.poster_path, 'w342'),
+          rating: item.vote_average,
+          year: item.release_date?.split('-')[0],
+          overview: item.overview,
+          type: 'movie'
+        })) || [];
 
-        setTrendingMovies(moviesData.results.slice(0, 12));
-        setTrendingTV(tvData.results.slice(0, 12));
+        const shows = tvData.results?.slice(0, 10).map(item => ({
+          id: item.id,
+          title: item.name,
+          poster: getImageUrl(item.poster_path, 'w342'),
+          rating: item.vote_average,
+          year: item.first_air_date?.split('-')[0],
+          overview: item.overview,
+          type: 'tv'
+        })) || [];
+
+        setContent([...movies, ...shows].sort(() => Math.random() - 0.5));
       } catch (error) {
-        console.error('Error fetching trending:', sanitizeForLog(error.message));
-        setTrendingMovies([]);
-        setTrendingTV([]);
+        console.error('Error loading trending content:', error);
       } finally {
         setLoading(false);
       }
     };
-
-    fetchTrending();
+    loadTrending();
   }, []);
 
-  const handleItemClick = (item, type) => {
-    if (type === 'tv') {
-      navigate(`/tv/${item.id}`);
+  const handleWishlist = (item, e) => {
+    e.stopPropagation();
+    if (isInWatchlist(item.id, item.type)) {
+      removeFromWatchlist(item.id, item.type);
     } else {
-      navigate(`/movie/${item.id}`);
+      addToWatchlist(item);
     }
   };
+
+  const filteredContent = activeTab === 'all' 
+    ? content 
+    : content.filter(item => item.type === activeTab);
 
   return (
     <div className="bg-black min-h-screen">
       <Navbar />
       
-      <div className="pt-20 pb-8">
-        <div className="container mx-auto px-4 md:px-6 lg:px-8">
-          <div className="text-center mb-8 md:mb-12">
-            <h1 className="text-3xl md:text-4xl lg:text-6xl font-bold text-white mb-4 flex flex-col md:flex-row items-center justify-center gap-3">
-              <TrendingUp className="text-red-600" size={36} md:size={48} />
-              <span>Trending This Week</span>
-            </h1>
-            <p className="text-white/70 text-base md:text-lg">Most popular movies and TV shows</p>
-          </div>
-
-          {loading ? (
-            <div className="flex items-center justify-center py-20">
-              <motion.div 
-                className="w-8 h-8 border-2 border-red-600 border-opacity-30 border-t-red-600 rounded-full"
-                animate={{ rotate: 360 }}
-                transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
-              />
-            </div>
-          ) : (
-            <div className="space-y-12 md:space-y-16">
-              <section>
-                <h2 className="text-2xl md:text-3xl font-bold text-white mb-6 md:mb-8 flex items-center justify-center md:justify-start gap-3">
-                  🎬 Trending Movies
-                </h2>
-                <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-3 md:gap-4">
-                  {trendingMovies.map((movie, index) => (
-                    <motion.div
-                      key={movie.id}
-                      className="relative group cursor-pointer"
-                      whileHover={{ scale: 1.05 }}
-                      initial={{ opacity: 0, y: 20 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      transition={{ delay: index * 0.1 }}
-                      onClick={() => handleItemClick(movie, 'movie')}
-                    >
-                      <div className="absolute top-2 left-2 bg-red-600 text-white text-xs font-bold px-2 py-1 rounded z-10">
-                        #{index + 1}
-                      </div>
-                      <img
-                        src={getImageUrl(movie.poster_path, 'poster')}
-                        alt={movie.title}
-                        className="w-full h-80 object-cover rounded-lg"
-                        onError={(e) => {
-                          e.target.src = 'https://via.placeholder.com/500x750?text=No+Image';
-                        }}
-                      />
-                      <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity rounded-lg flex flex-col justify-end p-4">
-                        <h3 className="text-white font-semibold text-sm mb-2 line-clamp-2">{movie.title}</h3>
-                        <div className="flex items-center gap-2 text-xs text-gray-300">
-                          <Star size={12} fill="currentColor" className="text-yellow-400" />
-                          <span>{movie.vote_average?.toFixed(1)}</span>
-                          <Calendar size={12} />
-                          <span>{movie.release_date?.split('-')[0]}</span>
-                        </div>
-                      </div>
-                    </motion.div>
-                  ))}
-                </div>
-              </section>
-
-              <section>
-                <h2 className="text-2xl md:text-3xl font-bold text-white mb-6 md:mb-8 flex items-center justify-center md:justify-start gap-3">
-                  📺 Trending TV Shows
-                </h2>
-                <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-3 md:gap-4">
-                  {trendingTV.map((show, index) => (
-                    <motion.div
-                      key={show.id}
-                      className="relative group cursor-pointer"
-                      whileHover={{ scale: 1.05 }}
-                      initial={{ opacity: 0, y: 20 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      transition={{ delay: index * 0.1 }}
-                      onClick={() => handleItemClick(show, 'tv')}
-                    >
-                      <div className="absolute top-2 left-2 bg-red-600 text-white text-xs font-bold px-2 py-1 rounded z-10">
-                        #{index + 1}
-                      </div>
-                      <img
-                        src={getImageUrl(show.poster_path, 'poster')}
-                        alt={show.name}
-                        className="w-full h-80 object-cover rounded-lg"
-                        onError={(e) => {
-                          e.target.src = 'https://via.placeholder.com/500x750?text=No+Image';
-                        }}
-                      />
-                      <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity rounded-lg flex flex-col justify-end p-4">
-                        <h3 className="text-white font-semibold text-sm mb-2 line-clamp-2">{show.name}</h3>
-                        <div className="flex items-center gap-2 text-xs text-gray-300">
-                          <Star size={12} fill="currentColor" className="text-yellow-400" />
-                          <span>{show.vote_average?.toFixed(1)}</span>
-                          <Calendar size={12} />
-                          <span>{show.first_air_date?.split('-')[0]}</span>
-                        </div>
-                      </div>
-                    </motion.div>
-                  ))}
-                </div>
-              </section>
-            </div>
-          )}
+      <div className="pt-20 px-4">
+        <h1 className="text-3xl text-white font-bold mb-8">Trending Now</h1>
+        
+        <div className="flex gap-4 mb-8">
+          {['all', 'movie', 'tv'].map(tab => (
+            <button
+              key={tab}
+              onClick={() => setActiveTab(tab)}
+              className={`px-4 py-2 rounded-lg font-medium transition-colors ${
+                activeTab === tab
+                  ? 'bg-red-600 text-white'
+                  : 'bg-gray-800 text-gray-300 hover:bg-gray-700'
+              }`}
+            >
+              {tab === 'all' ? 'All' : tab === 'movie' ? 'Movies' : 'TV Shows'}
+            </button>
+          ))}
         </div>
+
+        {loading ? (
+          <div className="text-white text-center py-8">Loading trending content...</div>
+        ) : (
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4">
+            {filteredContent.map(item => (
+              <div
+                key={`${item.id}-${item.type}`}
+                className="relative cursor-pointer group hover:scale-105 transition-transform"
+                onClick={() => navigate(`/${item.type}/${item.id}`)}
+              >
+                <img
+                  src={item.poster}
+                  alt={item.title}
+                  className="w-full aspect-[2/3] object-cover rounded-lg"
+                />
+                <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity rounded-lg flex items-center justify-center">
+                  <div className="flex gap-2">
+                    <button className="bg-red-600 text-white p-2 rounded-full hover:bg-red-700">
+                      <Play size={16} fill="currentColor" />
+                    </button>
+                    <button
+                      onClick={(e) => handleWishlist(item, e)}
+                      className={`p-2 rounded-full ${
+                        isInWatchlist(item.id, item.type)
+                          ? 'bg-red-600 text-white'
+                          : 'bg-gray-600 text-white'
+                      }`}
+                    >
+                      <Heart size={16} fill={isInWatchlist(item.id, item.type) ? 'currentColor' : 'none'} />
+                    </button>
+                  </div>
+                </div>
+                <div className="mt-2">
+                  <h3 className="text-white text-sm font-medium truncate">{item.title}</h3>
+                  <div className="flex items-center gap-2 text-xs text-gray-400">
+                    <span>★ {item.rating?.toFixed(1)}</span>
+                    <span>{item.year}</span>
+                    <span className="capitalize">{item.type}</span>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
       </div>
-      
+
       <Footer />
     </div>
   );

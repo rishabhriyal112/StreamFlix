@@ -5,16 +5,17 @@ import TVShows from "./pages/TVShowsPage/TVShowsPage";
 import TVShow from "./pages/TVShow/TVShow";
 import Search from "./pages/Search/Search";
 import Movie from "./pages/Movie/Movie";
+import AnimePage from "./pages/AnimePage/AnimePage";
+import Anime from "./pages/Anime/Anime";
 import Player from "./pages/Player/Player";
 import Watchlist from "./pages/Watchlist/Watchlist";
 import Trending from "./pages/Trending/Trending";
-import GoogleAnalytics from "./components/Analytics/GoogleAnalytics";
+
 import { Route, Routes } from "react-router-dom";
 
 const App = () => {
   return (
     <div>
-      <GoogleAnalytics />
       <Routes>
         <Route path="/" element={<Home />}></Route>
         <Route path="/movies" element={<Movies />}></Route>
@@ -24,6 +25,8 @@ const App = () => {
         <Route path="/search" element={<Search />}></Route>
         <Route path="/movie/:id" element={<Movie />}></Route>
         <Route path="/tv/:id" element={<TVShow />}></Route>
+        <Route path="/anime" element={<AnimePage />}></Route>
+        <Route path="/anime/:id" element={<Anime />}></Route>
         <Route path="/player/:id" element={<Player />}></Route>
         <Route path="/player/tv/:id" element={<Player />}></Route>
       </Routes>

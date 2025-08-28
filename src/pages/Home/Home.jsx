@@ -2,16 +2,11 @@ import Navbar from "../../components/Navbar/Navbar";
 import TitleCards from "../../components/TitleCards/TitleCards";
 import Footer from "../../components/Footer/Footer";
 import SEO from "../../components/SEO/SEO";
-import SocialBar from "../../components/SocialBar/SocialBar";
-
-
-
-import MoneytagAd from "../../components/MoneytagAd/MoneytagAd";
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import { Play, Info, Star, Calendar, ChevronLeft, ChevronRight } from "lucide-react";
-import { secureFetch, getImageUrl, sanitizeForLog } from "../../utils/api";
+import { fetchTVShows, getImageUrl } from "../../utils/api";
 
 const Home = () => {
   const navigate = useNavigate();
@@ -24,53 +19,20 @@ const Home = () => {
 
   const fetchHeroMovies = async () => {
     try {
-      const apiToken = import.meta.env.VITE_TMDB_EXTERNAL_SERVICE_AUTH_TOKEN;
-      if (!apiToken || typeof apiToken !== 'string' || !/^[a-zA-Z0-9]+$/.test(apiToken)) {
-        throw new Error('Invalid API token format');
-      }
-      
-      const data = await secureFetch(`https://api.themoviedb.org/3/tv/popular?api_key=${apiToken}&page=1`);
-      
-      if (!data?.results) {
-        throw new Error('Invalid API response structure');
-      }
-      
-      const moviesWithDetails = await Promise.all(
-        data.results.slice(0, 5).map(async (show) => {
-          try {
-            const detailData = await secureFetch(`https://api.themoviedb.org/3/tv/${show.id}?api_key=${apiToken}&append_to_response=external_ids`);
-            
-            return {
-              id: show.id,
-              title: show.name || 'Unknown Title',
-              overview: show.overview || 'No description available',
-              backdrop: getImageUrl(show.backdrop_path || show.poster_path, 'backdrop'),
-              poster: getImageUrl(show.poster_path, 'poster'),
-              rating: show.vote_average || 0,
-              year: show.first_air_date?.split('-')[0] || 'N/A',
-              imdb: detailData?.external_ids?.imdb_id || `tmdb_${show.id}`,
-              type: 'tv'
-            };
-          } catch (error) {
-            console.error(`Error fetching details for show ${sanitizeForLog(show.id)}:`, sanitizeForLog(error.message));
-            return {
-              id: show.id,
-              title: show.name || 'Unknown Title',
-              overview: show.overview || 'No description available',
-              backdrop: getImageUrl(show.backdrop_path || show.poster_path, 'backdrop'),
-              poster: getImageUrl(show.poster_path, 'poster'),
-              rating: show.vote_average || 0,
-              year: show.first_air_date?.split('-')[0] || 'N/A',
-              imdb: `tmdb_${show.id}`,
-              type: 'tv'
-            };
-          }
-        })
-      );
-      
-      setHeroMovies(moviesWithDetails);
+      const data = await fetchTVShows();
+      const heroContent = data.results?.slice(0, 5).map(show => ({
+        id: show.id,
+        title: show.name,
+        overview: show.overview,
+        backdrop: getImageUrl(show.backdrop_path, 'w1280'),
+        poster: getImageUrl(show.poster_path, 'w500'),
+        rating: show.vote_average,
+        year: show.first_air_date?.split('-')[0],
+        type: 'tv'
+      })) || [];
+      setHeroMovies(heroContent);
     } catch (error) {
-      console.error('Error fetching hero movies:', sanitizeForLog(error.message));
+      console.error('Error fetching hero movies:', error);
       setHeroMovies([]);
     } finally {
       setLoading(false);
@@ -160,7 +122,9 @@ const Home = () => {
                 <button 
                   className="bg-red-600 text-white px-6 py-3 rounded-lg text-sm font-bold cursor-pointer hover:bg-red-700 transition-colors min-w-[120px] h-[40px] flex items-center justify-center gap-2"
                   onClick={() => {
-                    setTimeout(() => setSelectedMovie(currentMovie), 100);
+                    if (currentMovie?.id) {
+                      navigate(`/tv/${currentMovie.id}`);
+                    }
                   }}
                 >
                   <Play size={16} fill="currentColor" />
@@ -242,25 +206,11 @@ const Home = () => {
 
 
       {/* Footer */}
-      {/* Movie Player Modal */}
-      {selectedMovie && (
-        <div className="fixed inset-0 bg-black/90 flex items-center justify-center z-50" onClick={() => setSelectedMovie(null)}>
-          <div className="w-[90%] max-w-4xl h-[60vh] md:h-[450px] rounded-xl overflow-hidden" onClick={e => e.stopPropagation()}>
-            <iframe
-              src={`https://vidsrc.cc/v2/embed/tv/${selectedMovie.imdb.startsWith('tt') ? selectedMovie.imdb : selectedMovie.id}/1/1`}
-              title={selectedMovie.title}
-              frameBorder="0"
-              allowFullScreen
-              className="w-full h-full"
-            />
-          </div>
-        </div>
-      )}
 
 
 
 
-      <SocialBar />
+
       <Footer />
     </div>
   );
