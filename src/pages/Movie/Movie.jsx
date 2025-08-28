@@ -6,6 +6,16 @@ import Footer from '../../components/Footer/Footer';
 import { fetchMovieDetails, fetchMovies, getImageUrl } from '../../utils/api';
 import { addToWatchlist, removeFromWatchlist, isInWatchlist } from '../../utils/wishlist';
 
+const getPlayerUrl = (source, movieId) => {
+  const id = encodeURIComponent(movieId);
+  const urls = {
+    vidsrc: `https://vidsrc.cc/v2/embed/movie/${id}`,
+    videasy: `https://player.videasy.net/movie/${id}`,
+    vidlink: `https://vidlink.pro/movie/${id}`
+  };
+  return urls[source] || urls.vidsrc;
+};
+
 const Movie = () => {
   const { id } = useParams();
   const navigate = useNavigate();
@@ -87,6 +97,7 @@ const Movie = () => {
   };
 
   const handleWishlist = () => {
+    if (!movie) return;
     if (isInWatchlist(movie.id, movie.type)) {
       removeFromWatchlist(movie.id, movie.type);
     } else {
@@ -137,12 +148,7 @@ const Movie = () => {
               {movie.title}
             </div>
             <iframe
-              src={playerSource === 'vidsrc' 
-                ? `https://vidsrc.cc/v2/embed/movie/${movie.id}`
-                : playerSource === 'videasy'
-                ? `https://player.videasy.net/movie/${movie.id}`
-                : `https://vidlink.pro/movie/${movie.id}`
-              }
+              src={getPlayerUrl(playerSource, movie.id)}
               title={movie.title}
               frameBorder="0"
               allowFullScreen

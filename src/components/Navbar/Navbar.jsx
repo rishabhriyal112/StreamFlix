@@ -11,13 +11,20 @@ const Navbar = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [wishlistCount, setWishlistCount] = useState(0);
 
-  // Scroll handler
+  // Throttled scroll handler
   useEffect(() => {
+    let ticking = false;
     const handleScroll = () => {
-      setIsScrolled(window.scrollY > 50);
+      if (!ticking) {
+        requestAnimationFrame(() => {
+          setIsScrolled(window.scrollY > 50);
+          ticking = false;
+        });
+        ticking = true;
+      }
     };
 
-    window.addEventListener('scroll', handleScroll);
+    window.addEventListener('scroll', handleScroll, { passive: true });
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
@@ -42,7 +49,6 @@ const Navbar = () => {
     { name: "Movies", href: "/movies" },
     { name: "Series", href: "/tv-shows" },
     { name: "Anime", href: "/anime" },
-    { name: "Trending", href: "/trending" },
     { name: "My List", href: "/watchlist" }
   ];
 

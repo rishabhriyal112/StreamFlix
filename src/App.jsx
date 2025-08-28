@@ -9,7 +9,7 @@ import AnimePage from "./pages/AnimePage/AnimePage";
 import Anime from "./pages/Anime/Anime";
 import Player from "./pages/Player/Player";
 import Watchlist from "./pages/Watchlist/Watchlist";
-import Trending from "./pages/Trending/Trending";
+
 
 import { Route, Routes } from "react-router-dom";
 
@@ -20,7 +20,7 @@ const App = () => {
         <Route path="/" element={<Home />}></Route>
         <Route path="/movies" element={<Movies />}></Route>
         <Route path="/tv-shows" element={<TVShows />}></Route>
-        <Route path="/trending" element={<Trending />}></Route>
+
         <Route path="/watchlist" element={<Watchlist />}></Route>
         <Route path="/search" element={<Search />}></Route>
         <Route path="/movie/:id" element={<Movie />}></Route>

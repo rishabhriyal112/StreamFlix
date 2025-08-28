@@ -4,7 +4,7 @@ const Footer = () => {
       <div className="max-w-6xl mx-auto px-4">
         <div className="flex flex-col md:flex-row justify-between items-center mb-8">
           <div className="flex items-center mb-4 md:mb-0">
-            <img src="/play.png" alt="" className="w-6 h-6 mr-2" />
+            <img src="/play.png" alt="StreamFlix logo" className="w-6 h-6 mr-2" />
             <h3 className="text-lg font-bold text-red-400">StreamFlix</h3>
           </div>
         </div>

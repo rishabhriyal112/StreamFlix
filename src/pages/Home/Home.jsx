@@ -134,7 +134,9 @@ const Home = () => {
                 <button 
                   className="bg-white/20 text-white border border-white/30 px-6 py-3 rounded-lg text-sm font-medium cursor-pointer hover:bg-white/30 transition-colors backdrop-blur-sm min-w-[100px] h-[40px] flex items-center justify-center gap-2"
                   onClick={() => {
-                    setTimeout(() => navigate(`/tv/${currentMovie?.id}`), 100);
+                    if (currentMovie?.id) {
+                      navigate(`/tv/${currentMovie.id}`);
+                    }
                   }}
                 >
                   <Info size={16} />
@@ -189,15 +191,7 @@ const Home = () => {
               <section aria-labelledby="popular-tv">
                 <TitleCards title="Popular TV Shows" category="tv" />
               </section>
-              <div className="text-center mt-12">
-                <button 
-                  onClick={() => navigate('/trending')}
-                  className="bg-red-600 text-white px-8 py-3 rounded-lg hover:bg-red-700 transition-colors font-semibold"
-                  aria-label="View all trending movies and TV shows"
-                >
-                  View All Trending Content
-                </button>
-              </div>
+
             </div>
           </div>
         </section>

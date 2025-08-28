@@ -45,6 +45,7 @@ const Anime = () => {
   }, [id]);
 
   const handleWishlist = () => {
+    if (!anime) return;
     if (isInWatchlist(anime.id, anime.type)) {
       removeFromWatchlist(anime.id, anime.type);
     } else {

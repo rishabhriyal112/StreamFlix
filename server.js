@@ -11,7 +11,15 @@ app.use(cors());
 app.use(express.static(path.join(__dirname, 'dist')));
 
 app.get('*', (req, res) => {
-  res.sendFile(path.join(__dirname, 'dist', 'index.html'));
+  const safePath = path.normalize(path.join(__dirname, 'dist', 'index.html'));
+  const distPath = path.join(__dirname, 'dist');
+  
+  // Ensure the resolved path is within the dist directory
+  if (!safePath.startsWith(distPath)) {
+    return res.status(403).send('Access denied');
+  }
+  
+  res.sendFile(safePath);
 });
 
 app.listen(PORT, () => {

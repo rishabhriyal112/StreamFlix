@@ -14,8 +14,18 @@ const SEO = ({
     // Update document title
     document.title = fullTitle;
     
+    // Sanitize content to prevent XSS
+    const sanitizeContent = (content) => {
+      if (typeof content !== 'string') return '';
+      return content.replace(/[<>"'&]/g, (match) => {
+        const entities = { '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#x27;', '&': '&amp;' };
+        return entities[match];
+      });
+    };
+
     // Update meta tags
     const updateMeta = (name, content) => {
+      const sanitizedContent = sanitizeContent(content);
       let meta = document.querySelector(`meta[name="${name}"]`) || document.querySelector(`meta[property="${name}"]`);
       if (!meta) {
         meta = document.createElement('meta');
@@ -26,7 +36,7 @@ const SEO = ({
         }
         document.head.appendChild(meta);
       }
-      meta.setAttribute('content', content);
+      meta.setAttribute('content', sanitizedContent);
     };
 
     updateMeta('description', description);

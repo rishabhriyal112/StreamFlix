@@ -46,7 +46,9 @@ const TitleCards = ({ title, category = 'movie' }) => {
     <div className="mt-8 px-4">
       <h2 className="text-2xl text-white font-bold mb-4">{title}</h2>
       <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4">
-        {movies.map(movie => (
+        {movies.map(movie => {
+          const inWishlist = isInWatchlist(movie.id, movie.type);
+          return (
           <div
             key={movie.id}
             className="relative cursor-pointer group hover:scale-105 transition-transform"
@@ -56,6 +58,9 @@ const TitleCards = ({ title, category = 'movie' }) => {
               src={movie.poster}
               alt={movie.title}
               className="w-full aspect-[2/3] object-cover rounded-lg"
+              onError={(e) => {
+                e.target.src = 'https://via.placeholder.com/342x513?text=No+Image';
+              }}
             />
             <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity rounded-lg flex items-center justify-center">
               <div className="flex gap-2">
@@ -65,12 +70,12 @@ const TitleCards = ({ title, category = 'movie' }) => {
                 <button
                   onClick={(e) => handleWishlist(movie, e)}
                   className={`p-2 rounded-full ${
-                    isInWatchlist(movie.id, movie.type)
+                    inWishlist
                       ? 'bg-red-600 text-white'
                       : 'bg-gray-600 text-white'
                   }`}
                 >
-                  <Heart size={16} fill={isInWatchlist(movie.id, movie.type) ? 'currentColor' : 'none'} />
+                  <Heart size={16} fill={inWishlist ? 'currentColor' : 'none'} />
                 </button>
               </div>
             </div>
@@ -82,7 +87,8 @@ const TitleCards = ({ title, category = 'movie' }) => {
               </div>
             </div>
           </div>
-        ))}
+        );
+        })}
       </div>
     </div>
   );
